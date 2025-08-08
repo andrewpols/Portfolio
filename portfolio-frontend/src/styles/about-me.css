@@ -1,0 +1,141 @@
+#about-me-container {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: auto;
+}
+
+#about-me-intro {
+    width: 100%;
+    box-sizing: border-box;
+
+    display: grid;
+    grid-template-rows: 1fr;
+    grid-template-columns: 1fr 1fr;
+
+    padding: 0 3em;
+}
+
+#about-me-text {
+    margin-left: 3em;
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+}
+
+#about-me-title {
+    text-align: left;
+    margin-bottom: 0;
+    width: 100%;
+}
+
+#about-me-desc {
+    text-align: left;
+    text-wrap: balance;
+    max-width: 700px;
+
+    font-size: 1.2em;
+}
+
+
+#about-me-picture {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: auto;
+}
+
+#about-me-cards-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    width: 90%;
+    margin: auto;
+    flex-wrap: wrap;
+
+    gap: 2em;
+}
+
+.about-me-card {
+    padding: 1em 2em;
+    flex: 0 1 20%;
+    background: #061c39;
+    border-radius: 4px;
+}
+
+#tech-stack-section {
+    margin-top: 10vh;
+}
+
+#tech-stack {
+    display: flex;
+    flex-wrap: wrap;
+
+    gap: 15px;
+
+    width: 90%;
+    max-width: 1400px;
+    height: max-content;
+
+    align-items: center;
+    justify-content: center;
+    margin: auto;
+}
+
+.language-div {
+    flex: 0 1 32%;
+    max-width: 350px;
+    height: 10vh;
+    max-height: 110px;
+    color: white;
+    font-family: inherit;
+    background: #050729;
+
+    border-radius: 4px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1em;
+    padding: 0 1em;
+
+    box-shadow: #3c3838 0 0 25px -8px;
+
+    transition: transform 500ms, box-shadow 300ms;
+
+    &:hover {
+        transform: scale(105%);
+        cursor: pointer;
+        box-shadow: #3c3838 0 0 25px -5px;
+    }
+
+    h2 {
+        font-size: 1.6em;
+        font-weight: 500;
+        text-wrap: nowrap;
+    }
+
+    img {
+        height: 60%;
+    }
+}
+
+
+@media (max-width: 1000px) {
+    #about-me-intro {
+        grid-template-columns: 1fr;
+        grid-template-rows: max-content 1fr;
+    }
+
+    #about-me-picture {
+        order: -1;
+    }
+
+    #about-me-title, #about-me-desc {
+        text-align: center;
+    }
+
+    #about-me-text {
+        margin-left: 0;
+    }
+
+}

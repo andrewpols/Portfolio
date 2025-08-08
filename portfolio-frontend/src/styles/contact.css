@@ -1,0 +1,114 @@
+#contact-container {
+    border-radius: 32px;
+
+    min-width: 300px;
+    width: 70vw;
+    max-width: 1500px;
+
+    min-height: min-content;
+    align-items: center;
+    justify-content: center;
+    margin: 5em auto auto auto;
+
+    padding: 30px 42px 30px 42px;
+    background-color: rgba(3, 15, 35, 0.38);
+    box-shadow: #403d3d 0 0 55px -5px;
+
+    align-self: center;
+
+}
+
+.contact-info {
+    * {
+        margin: 0;
+    }
+
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    gap: 0.4rem;
+
+    .contact-field {
+        color: white;
+    }
+}
+
+#contact-info-container {
+    display: grid;
+    grid-template-rows: 1fr;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+
+    justify-items: center;
+    align-items: start;
+
+    row-gap: 1em;
+
+    margin: 3em auto;
+
+}
+
+input, textarea {
+    border: 1px solid #ffffff;
+    color: white;
+    background-color: rgba(27, 27, 55, 0.1);
+    border-radius: 18px;
+    padding: 10px 24px;
+}
+
+label {
+    margin-left: 5px;
+    margin-bottom: 5px;
+}
+
+#input-contact-container {
+    height: max-content;
+}
+
+#sender-contact-info {
+    display: grid;
+    grid-template-rows: 1fr;
+    grid-template-columns: repeat(auto-fit, minmax(221px, 1fr));
+    column-gap: 8%;
+    row-gap: 8%;
+
+
+    margin: 2.5em 10% 0 10%;
+
+    > div {
+        /*Width = (80% (contact section size) - 2% gap )   /   2*/
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+
+    input {
+        width: 100%;
+        box-sizing: border-box;
+    }
+}
+
+.input-label-container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    align-content: center;
+    justify-content: center;
+}
+
+#sender-message-container {
+    margin: 1.5em auto;
+    width: 80%;
+
+}
+
+#sender-message {
+    min-width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+
+    min-height: 100px;
+    max-height: 20px;
+
+    font-family: inherit;
+
+}
