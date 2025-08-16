@@ -226,8 +226,8 @@ Key finding: individuals working from home reported a higher sense of accomplish
 
                     </div>
                     <div className="carousel-btns">
-                        <button className="carousel-prev-btn"><GrPrevious/></button>
-                        <button className="carousel-next-btn"><GrNext/></button>
+                        <button className="carousel-prev-btn [&>*]:m-auto"><GrPrevious/></button>
+                        <button className="carousel-next-btn [&>*]:m-auto"><GrNext/></button>
                     </div>
                 </div>
             </div>

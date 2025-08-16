@@ -2,6 +2,9 @@
     display: grid;
     grid-template-columns: 1fr;
     grid-template-rows: auto;
+    max-width: 100vw;
+    margin: auto;
+    overflow: hidden;
 }
 
 #about-me-intro {
@@ -31,18 +34,11 @@
 #about-me-desc {
     text-align: left;
     text-wrap: balance;
-    max-width: 700px;
+    max-width: 600px;
 
-    font-size: 1.2em;
+    font-size: clamp(1.2em, 2vw, 1.4em);
 }
 
-
-#about-me-picture {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: auto;
-}
 
 #about-me-cards-container {
     display: flex;
@@ -73,12 +69,13 @@
     gap: 15px;
 
     width: 90%;
-    max-width: 1400px;
+    max-width: 1900px;
     height: max-content;
 
     align-items: center;
     justify-content: center;
     margin: auto;
+    margin-top: 2em;
 }
 
 .language-div {
@@ -128,10 +125,21 @@
 
     #about-me-picture {
         order: -1;
-    }
+        max-width: 80vw;
+        margin: auto;
 
+        p, span {
+            text-wrap: wrap;
+        }
+
+    }
     #about-me-title, #about-me-desc {
         text-align: center;
+    }
+
+    #about-me-desc {
+        max-width: 100%;
+        margin-right: 0;
     }
 
     #about-me-text {

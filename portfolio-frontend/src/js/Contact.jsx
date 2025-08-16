@@ -4,7 +4,7 @@ export default function Contact() {
     return (
         <div id="contact-container" style={{marginTop: "7.5em", marginBottom: "4em"}}>
             <h1>Get in Touch!</h1>
-            <p>Whether you're a recruiter or just want to know more about me, feel free to contact me below.</p>
+            <p className="mt-5">Whether you're a recruiter or just want to know more about me, feel free to contact me below.</p>
 
             <div id="contact-info-container">
                 <div className="contact-info">
@@ -19,7 +19,7 @@ export default function Contact() {
                 </div>
             </div>
 
-            <hr className="divider"/>
+            <hr className="divider m-auto"/>
 
             <form id="input-contact-container" action="https://api.web3forms.com/submit" method="POST">
                 <div id="sender-contact-info">
