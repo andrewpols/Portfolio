@@ -64,7 +64,8 @@ section {
 #picture-container {
     #andrew-portrait {
         width: clamp(280px, 25vw, 500px);
-        margin-bottom: 2em;
+        margin: auto;
+        margin-bottom: 3em;
     }
 
     button {

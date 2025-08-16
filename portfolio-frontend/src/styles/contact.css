@@ -23,6 +23,8 @@
         margin: 0;
     }
 
+
+
     display: flex;
     align-items: center;
     flex-direction: column;
@@ -36,12 +38,15 @@
 #contact-info-container {
     display: grid;
     grid-template-rows: 1fr;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
 
+    width: 100%;
+    box-sizing: border-box;
     justify-items: center;
     align-items: start;
 
     row-gap: 1em;
+    height: max-content;
 
     margin: 3em auto;
 
@@ -67,7 +72,7 @@ label {
 #sender-contact-info {
     display: grid;
     grid-template-rows: 1fr;
-    grid-template-columns: repeat(auto-fit, minmax(221px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
     column-gap: 8%;
     row-gap: 8%;
 

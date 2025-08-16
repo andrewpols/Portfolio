@@ -135,7 +135,7 @@ export default function Layout() {
                     </div>
 
                     <div id="small-screen-header">
-                        <h1 style={{fontSize: "2.5em"}}>Icon</h1>
+                        <Link style={{fontSize: "2.5em", color: "white"}} to="/" onClick={() => scrollToElement("welcome-section")}>Home</Link>
                         <button className="icon-button" id="menu-btn" style={{zIndex: 0}} onClick={handleMenuToggle}>
                             <RiMenu3Fill/>
                         </button>
