@@ -1,21 +1,43 @@
-#contact-container {
-    border-radius: 32px;
-
-    min-width: 300px;
-    width: 70vw;
-    max-width: 1500px;
-
-    min-height: min-content;
+#contact-page {
+    min-height: 100vh;
+    display: flex;
     align-items: center;
     justify-content: center;
-    margin: 5em auto auto auto;
+}
 
-    padding: 30px 42px 30px 42px;
-    background-color: rgba(3, 15, 35, 0.38);
-    box-shadow: #403d3d 0 0 55px -5px;
+#contact-container {
+    min-width: 300px;
+    width: min(960px, calc(100% - 3rem));
+    margin: 6rem auto 3rem;
+    padding: clamp(1.25rem, 3vw, 2rem) clamp(1.5rem, 5vw, 3rem);
+    box-sizing: border-box;
+    text-align: center;
+    background: linear-gradient(145deg, rgba(15, 23, 42, 0.72), rgba(9, 13, 20, 0.82));
+    border: 1px solid rgba(148, 163, 184, 0.1);
+    border-radius: 4px;
+}
 
-    align-self: center;
+.contact-kicker {
+    margin: 0 0 0.6rem;
+    color: rgba(191, 219, 254, 0.78);
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+}
 
+.contact-title {
+    margin: 0;
+    color: #f8fbff;
+    font-size: clamp(2.5rem, 6vw, 4.5rem);
+    line-height: 1;
+}
+
+.contact-intro {
+    max-width: 38rem;
+    margin: 1.5rem auto 0;
+    color: rgba(226, 232, 240, 0.72);
+    line-height: 1.7;
 }
 
 .contact-info {
@@ -28,10 +50,25 @@
     display: flex;
     align-items: center;
     flex-direction: column;
-    gap: 0.4rem;
+    align-items: center;
+    gap: 0.55rem;
 
     .contact-field {
-        color: white;
+        color: rgba(240, 249, 255, 0.9);
+        font-size: 1.05rem;
+        font-weight: 500;
+        transition: color 180ms ease;
+    }
+
+    .contact-field:hover {
+        color: #f8fbff;
+    }
+
+    .contact-description {
+        color: rgba(191, 219, 254, 0.7);
+        font-size: 0.75rem;
+        font-weight: 700;
+        letter-spacing: 0.1em;
     }
 }
 
@@ -45,39 +82,50 @@
     justify-items: center;
     align-items: start;
 
-    row-gap: 1em;
+    column-gap: 3rem;
+    row-gap: 2rem;
     height: max-content;
 
-    margin: 3em auto;
+    margin: 2rem 0;
 
 }
 
-input, textarea {
-    border: 1px solid #ffffff;
-    color: white;
-    background-color: rgba(27, 27, 55, 0.1);
-    border-radius: 18px;
-    padding: 10px 24px;
+#contact-container input,
+#contact-container textarea {
+    border: 1px solid rgba(148, 163, 184, 0.14);
+    border-radius: 3px;
+    color: #f8fbff;
+    background: rgba(3, 7, 18, 0.48);
+    padding: 0.8rem 0.9rem;
+    outline: none;
+    transition: border-color 180ms ease;
 }
 
-label {
-    margin-left: 5px;
-    margin-bottom: 5px;
+#contact-container input:focus,
+#contact-container textarea:focus {
+    border-color: rgba(191, 219, 254, 0.55);
+    background: rgba(3, 7, 18, 0.68);
+}
+
+#contact-container label {
+    margin: 0 0 0.3rem;
+    color: rgba(226, 232, 240, 0.6);
+    font-size: 0.85rem;
 }
 
 #input-contact-container {
     height: max-content;
+    text-align: left;
 }
 
 #sender-contact-info {
     display: grid;
     grid-template-rows: 1fr;
     grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-    column-gap: 8%;
-    row-gap: 8%;
+    column-gap: 3rem;
+    row-gap: 1.25rem;
 
-
-    margin: 2.5em 10% 0 10%;
+    margin: 1.5rem 0 0;
 
     > div {
         /*Width = (80% (contact section size) - 2% gap )   /   2*/
@@ -101,8 +149,8 @@ label {
 }
 
 #sender-message-container {
-    margin: 1.5em auto;
-    width: 80%;
+    margin: 1.25rem 0;
+    width: 100%;
 
 }
 
@@ -111,9 +159,39 @@ label {
     max-width: 100%;
     box-sizing: border-box;
 
-    min-height: 100px;
-    max-height: 20px;
+    min-height: 75px;
+    max-height: 180px;
 
     font-family: inherit;
 
+}
+
+.contact-divider {
+    width: 100%;
+    margin: 0;
+    border: none;
+    border-top: 1px solid rgba(148, 163, 184, 0.12);
+}
+
+#input-contact-container button {
+    display: block;
+    min-width: 7rem;
+    margin: 0 auto;
+    padding: 0.75rem 1.25rem;
+    border-radius: 3px;
+    background: rgba(226, 232, 240, 0.1);
+    border: 1px solid rgba(148, 163, 184, 0.2);
+    color: #f8fbff;
+}
+
+@media (max-width: 640px) {
+    #contact-container {
+        width: min(100% - 2rem, 960px);
+        margin: 6rem auto 4rem;
+        padding: 1.5rem;
+    }
+
+    #contact-info-container {
+        margin: 2.25rem 0;
+    }
 }

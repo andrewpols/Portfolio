@@ -20,67 +20,90 @@ section {
 }
 
 #welcome-container {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    grid-template-rows: 1fr;
-    align-items: end;
-    justify-content: space-evenly;
-    gap: clamp(2em, 5vw, 20px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2em;
 
     width: 100%;
+    max-width: 900px;
+    margin: 0 auto;
     box-sizing: border-box;
 
-    padding: 0 1em 0 1em;
+    padding: 0 1em;
+    position: relative;
+    z-index: 1;
+}
 
+#welcome-section {
+    position: relative;
+    overflow: hidden;
+}
+
+#welcome-section::before {
+    content: "";
+    position: absolute;
+    width: 42rem;
+    height: 42rem;
+    top: 4%;
+    left: 50%;
+    transform: translateX(-50%);
+    background: radial-gradient(circle, rgba(37, 100, 235, 0.153), transparent 75%);
+    pointer-events: none;
 }
 
 #info-container {
     height: 100%;
-    display: grid;
-    grid-template-rows: 1fr max-content;
-    row-gap: 2em;
-
-    margin-left: 5%;
+    text-align: center;
 
     #text-info {
-        align-self: end;
-
-        text-wrap: nowrap;
+        text-wrap: balance;
     }
 
     .contact-buttons-container {
-        align-items: start;
-        justify-content: start;
+        flex-direction: column;
+        align-items: stretch;
+        justify-content: flex-end;
+        gap: 0.75em;
+        width: auto;
+        margin: 0;
     }
 
-    #projects-btn-scroll {
-        border-radius: 4px;
-        width: clamp(180px, 15vw, 200px);
-        height: clamp(50px, 10vh, 55px);
+    .contact-buttons-container button {
+        background-color: rgba(220, 230, 248, 0.905);
+        border: 1px solid rgb(34, 74, 97);
+        border-radius: 3px;
+        width: clamp(150px, 13vw, 180px);
+        height: clamp(44px, 8vh, 50px);
+        padding-inline: 1rem;
+        font-size: clamp(0.85rem, 1.1vw, 1rem);
+
+        a {
+            color: rgb(15, 12, 46);
+        }
+    }
+
+    .contact-buttons-container .button-with-link {
+        padding: 0;
+        transition: transform 200ms ease;
+        &:hover {
+            transform: translateY(-2px);
+        }
     }
 
 }
 
-#picture-container {
-    #andrew-portrait {
-        width: clamp(280px, 25vw, 500px);
-        margin: auto;
-        margin-bottom: 3em;
-    }
-
-    button {
-        width: clamp(150px, 15vw, 190px);
-        height: clamp(45px, 10vh, 55px);
-    }
-
+#welcome-section .button-with-link {
+    border-radius: 3px;
 }
 
 #resume-btn {
-    background-color: rgba(19, 25, 24, 0.36);
-    border: 2px solid white;
+    background-color: rgba(15, 23, 42, 0.7) !important;
+    border: 1px solid rgba(148, 163, 184, 0.24) !important;
 
     a {
-        color: white;
+        color: #f8fbff !important;
         font-weight: 700;
     }
 }
@@ -95,7 +118,7 @@ section {
 
     hr {
         border: none;
-        width: clamp(350px, 27vw, 510px);
+        width: clamp(390px, 33.5vw, 510px);
         height: 100%;
         border-top: 7px solid #1a3a8c;
 
@@ -109,8 +132,12 @@ section {
 
 #intro-name {
     text-align: start;
-    margin: 0 0 0 0.5vw;
-    font-size: clamp(1.7em, 2.5vw, 37px);
+    margin: 0 0 0 0.5rem;
+    color: rgba(191, 219, 254, 0.8);
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.13em;
+    text-transform: uppercase;
 }
 
 #info-name {
@@ -121,11 +148,18 @@ section {
     text-align: left;
 }
 
+#info-school-block {
+    display: flex;
+    align-items: flex-end;
+    gap: clamp(1em, 3vw, 2.5em);
+}
+
 #info-school {
     margin-top: 0;
     font-size: clamp(1.7em, 2.2vw, 40px);
     font-weight: 500;
     text-align: left;
+    flex-shrink: 0;
 }
 
 .contact-buttons-container {
@@ -140,12 +174,23 @@ section {
 }
 
 @media (max-width: 1000px) {
+    #welcome-section {
+        min-height: 100svh;
+        display: flex;
+        align-items: center;
+        margin: 0 auto;
+        padding: 7.5rem 0 5rem;
+    }
+
     #welcome-container {
         display: grid;
         grid-template-rows: max-content max-content;
         grid-template-columns: 1fr;
 
-        row-gap: 0.5em;
+        row-gap: 1.5rem;
+        padding: 3rem 1.5rem;
+        position: relative;
+        z-index: 1;
 
         #picture-container {
             order: -1;
@@ -165,22 +210,48 @@ section {
         #info-container {
             margin-left: 0;
 
+            #info-school-block {
+                flex-direction: column;
+                align-items: center;
+                gap: 1.75rem;
+            }
+
             .contact-buttons-container {
+                flex-direction: row;
                 align-items: center;
                 justify-content: center;
+                width: 100%;
+                margin: auto;
+
+                gap: 0.75rem;
 
                 .button-with-link {
                     display: flex !important;
                     align-items: center;
                     justify-content: center;
-                    margin-top: -0.5em;
+                    margin-top: 0;
 
-                    width: clamp(160px, 20vw, 220px);
-                    height: clamp(40px, 8vh, 55px);
+                    width: min(42vw, 180px);
+                    height: clamp(44px, 8vh, 52px);
                 }
             }
 
-            #projects-btn-scroll, #intro-name, hr {
+            #intro-name-container {
+                margin-bottom: 0.9rem;
+            }
+
+            #intro-name {
+                display: block;
+                margin: 0;
+                color: rgba(191, 219, 254, 0.8);
+                font-size: 0.78rem;
+                font-weight: 700;
+                letter-spacing: 0.13em;
+                text-align: center;
+                text-transform: uppercase;
+            }
+
+            #intro-name-container hr {
                 display: none;
             }
 
@@ -188,13 +259,16 @@ section {
                 font-size: clamp(1.2em, 5vw, 35px);
             }
 
-            #info-name, #info-school {
+            #info-name,
+            #info-school {
                 margin-left: 0;
                 text-align: center;
             }
 
             #info-name {
-                font-size: clamp(3.8em, 12vw, 85px);
+                font-size: clamp(3.6em, 13vw, 85px);
+                line-height: 0.95;
+                margin-bottom: 1.25rem;
             }
         }
 
@@ -207,13 +281,14 @@ section {
 
 
 .mouse_scroll {
-    display: block;
-    margin: 0 auto;
-    width: 24px;
-    height: 100px;
-
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 60px;
     position: absolute;
-    bottom: 3em;
+    bottom: 8%;
     left: 50%;
     transform: translateX(-50%);
 }
@@ -225,100 +300,100 @@ section {
     background: none;
     border: none;
     box-shadow: none;
+    padding: 0;
+    transform: none !important;
+    opacity: 0.6;
+    transition: opacity 200ms ease;
+}
+
+#mouse-scroll-btn:hover {
+    opacity: 1;
+    box-shadow: none !important;
+    border: none !important;
+    transform: none !important;
+}
+
+#mouse-scroll-btn:focus-visible,
+#mouse-scroll-btn:active {
+    box-shadow: none !important;
+    border: none !important;
+    transform: none !important;
 }
 
 
 .m_scroll_arrows {
     display: block;
-    width: 5px;
-    height: 5px;
-    -ms-transform: rotate(45deg); /* IE 9 */
-    -webkit-transform: rotate(45deg); /* Chrome, Safari, Opera */
+    width: 10px;
+    height: 10px;
+    -ms-transform: rotate(45deg);
+    -webkit-transform: rotate(45deg);
     transform: rotate(45deg);
 
-    border-right: 2px solid white;
-    border-bottom: 2px solid white;
-    margin: 0 0 3px 4px;
-
-    width: 16px;
-    height: 16px;
+    border-right: 1.5px solid rgba(240, 249, 255, 0.7);
+    border-bottom: 1.5px solid rgba(240, 249, 255, 0.7);
+    margin: -5px 0 0 0;
 }
 
 
 .unu {
-    margin-top: 1px;
+    margin-top: 0;
 }
 
-.unu, .doi, .trei {
-    -webkit-animation: mouse-scroll 1s infinite;
-    -moz-animation: mouse-scroll 1s infinite;
-    animation: mouse-scroll 1s infinite;
-
+.unu,
+.doi,
+.trei {
+    -webkit-animation: mouse-scroll 2.25s infinite;
+    -moz-animation: mouse-scroll 2.25s infinite;
+    animation: mouse-scroll 2.25s infinite;
 }
 
 .unu {
-    -webkit-animation-delay: .1s;
-    -moz-animation-delay: .1s;
-    -webkit-animation-direction: alternate;
-
-    animation-direction: alternate;
-    animation-delay: alternate;
+    -webkit-animation-delay: 0s;
+    -moz-animation-delay: 0s;
+    animation-delay: 0s;
 }
 
 .doi {
-    -webkit-animation-delay: .2s;
-    -moz-animation-delay: .2s;
-    -webkit-animation-direction: alternate;
-
-    animation-delay: .2s;
-    animation-direction: alternate;
-
-    margin-top: -6px;
+    -webkit-animation-delay: .3s;
+    -moz-animation-delay: .3s;
+    animation-delay: .3s;
 }
 
 .trei {
-    -webkit-animation-delay: .3s;
-    -moz-animation-delay: .3s;
-    -webkit-animation-direction: alternate;
-
-    animation-delay: .3s;
-    animation-direction: alternate;
-
+    -webkit-animation-delay: .6s;
+    -moz-animation-delay: .6s;
+    animation-delay: .6s;
 
     margin-top: -6px;
 }
 
 .mouse {
-    height: 42px;
-    width: 24px;
-    border-radius: 14px;
+    height: 28px;
+    width: 16px;
+    border-radius: 8px;
     transform: none;
-    border: 2px solid white;
+    border: 1.5px solid rgba(240, 249, 255, 0.7);
     top: 170px;
+    margin-bottom: 4px;
 }
 
 .wheel {
-    height: 5px;
-    width: 2px;
+    height: 3px;
+    width: 3px;
     display: block;
-    margin: 5px auto;
-    background: white;
+    margin: 4px auto;
+    background: rgba(240, 249, 255, 0.7);
     position: relative;
 
-    height: 4px;
-    width: 4px;
-    border: 2px solid #fff;
-    -webkit-border-radius: 8px;
-    border-radius: 8px;
-
-    /*    Move this element down on scroll*/
+    border: none;
+    border-radius: 3px;
 
 }
 
 .wheel {
-    -webkit-animation: mouse-wheel 0.6s linear infinite;
-    -moz-animation: mouse-wheel 0.6s linear infinite;
-    animation: mouse-wheel 0.6s linear infinite;
+    -webkit-animation: mouse-wheel 1.5s linear infinite;
+    -moz-animation: mouse-wheel 1.5s linear infinite;
+    animation: mouse-wheel 1.5s linear infinite;
 }
 
 @-webkit-keyframes mouse-wheel {
@@ -331,9 +406,23 @@ section {
 
     100% {
         opacity: 0;
-        -webkit-transform: translateY(6px);
-        -ms-transform: translateY(6px);
-        transform: translateY(6px);
+        -webkit-transform: translateY(8px);
+        -ms-transform: translateY(8px);
+        transform: translateY(8px);
+    }
+}
+
+@keyframes mouse-wheel {
+    0% {
+        opacity: 1;
+        -ms-transform: translateY(0);
+        transform: translateY(0);
+    }
+
+    100% {
+        opacity: 0;
+        -ms-transform: translateY(8px);
+        transform: translateY(8px);
     }
 }
 
@@ -341,15 +430,19 @@ section {
     0% {
         top: 1px;
     }
+
     25% {
         top: 2px;
     }
+
     50% {
         top: 3px;
     }
+
     75% {
         top: 2px;
     }
+
     100% {
         top: 1px;
     }
@@ -360,15 +453,19 @@ section {
     0% {
         top: 1px;
     }
+
     25% {
         top: 2px;
     }
+
     50% {
         top: 3px;
     }
+
     75% {
         top: 2px;
     }
+
     100% {
         top: 1px;
     }
@@ -379,15 +476,19 @@ section {
     0% {
         top: 1px;
     }
+
     25% {
         top: 2px;
     }
+
     50% {
         top: 3px;
     }
+
     75% {
         top: 2px;
     }
+
     100% {
         top: 1px;
     }
@@ -395,52 +496,52 @@ section {
 
 @-webkit-keyframes mouse-scroll {
 
-    0% {
+    0%,
+    40%,
+    100% {
         opacity: 0;
     }
-    50% {
-        opacity: .5;
-    }
-    100% {
+
+    20% {
         opacity: 1;
     }
 }
 
 @-moz-keyframes mouse-scroll {
 
-    0% {
+    0%,
+    40%,
+    100% {
         opacity: 0;
     }
-    50% {
-        opacity: .5;
-    }
-    100% {
+
+    20% {
         opacity: 1;
     }
 }
 
 @-o-keyframes mouse-scroll {
 
-    0% {
+    0%,
+    40%,
+    100% {
         opacity: 0;
     }
-    50% {
-        opacity: .5;
-    }
-    100% {
+
+    20% {
         opacity: 1;
     }
 }
 
 @keyframes mouse-scroll {
 
-    0% {
+    0%,
+    40%,
+    100% {
         opacity: 0;
     }
-    50% {
-        opacity: .5;
-    }
-    100% {
+
+    20% {
         opacity: 1;
     }
 }
