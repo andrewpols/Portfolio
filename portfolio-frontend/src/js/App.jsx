@@ -2,6 +2,8 @@ import {BrowserRouter, Route, Routes} from "react-router-dom";
 
 import Layout from "./Layout.jsx";
 import Home from "./Home.jsx";
+import Portfolio from "./Portfolio.jsx";
+import About from "./About.jsx";
 import Resume from "./Resume.jsx";
 import Contact from "./Contact.jsx";
 
@@ -16,7 +18,11 @@ function MainRoutes() {
 
                     <Route index element={<Home />} />
 
-                    <Route path="Resume" element={<Resume />} />
+                    <Route path="portfolio" element={<Portfolio />} />
+
+                    <Route path="about" element={<About />}/>
+
+                    <Route path="resume" element={<Resume />} />
 
                     <Route path="contact" element={<Contact />}/>
 

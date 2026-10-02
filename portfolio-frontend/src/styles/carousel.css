@@ -34,8 +34,7 @@
     justify-content: center;
     margin: auto;
 
-    /*background-color: #9f0b75;*/
-    border-radius: 30px;
+    border-radius: 4px;
 
 }
 
@@ -51,10 +50,10 @@
 
         width: var(--button-size);
         height: var(--button-size);
-        border-radius: 50%;
-        background: linear-gradient(137deg, #1c2020 4.87%, #0c0d0e 75.88%);
+        border-radius: 4px;
+        background: rgba(11, 17, 28, 0.9);
+        border: 1px solid rgba(148, 163, 184, 0.12);
         padding: 0;
-        /*border: 1px solid #131313;*/
         position: relative;
 
 
@@ -70,17 +69,14 @@
             content: "";
             min-height: calc(var(--button-size) - 5px);
             min-width: calc(var(--button-size) - 5px);
-            /*background: red;*/
-            border: 1px solid #131313;
-            box-shadow:  0 -10px 20px -18px white;
-            border-radius: 50%;
+            border: 1px solid rgba(148, 163, 184, 0.08);
+            box-shadow: none;
+            border-radius: 3px;
 
             position: absolute;
             top: 3px;
             left: 50%;
             transform: translateX(-50%);
-
-
 
             z-index: 1;
         }

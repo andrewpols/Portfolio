@@ -2,11 +2,13 @@ import "../styles/contact.css";
 
 export default function Contact() {
     return (
-        <div id="contact-container" style={{marginTop: "7.5em", marginBottom: "4em"}}>
-            <h1>Get in Touch!</h1>
-            <p>Whether you're a recruiter or just want to know more about me, feel free to contact me below.</p>
+        <main id="contact-page">
+            <div id="contact-container">
+                <p className="contact-kicker">Contact</p>
+                <h1 className="contact-title">Get in touch.</h1>
+                <p className="contact-intro">Whether you're a recruiter or just want to know more about me, feel free to contact me below.</p>
 
-            <div id="contact-info-container">
+                <div id="contact-info-container">
                 <div className="contact-info">
                     <p className="contact-description">EMAIL ME</p>
                     <a className="contact-field"
@@ -17,11 +19,11 @@ export default function Contact() {
                     <p className="contact-description">CALL ME</p>
                     <a className="contact-field" href="tel:+15198181374">+1 (519) 818-1374</a>
                 </div>
-            </div>
+                </div>
 
-            <hr className="divider"/>
+                <hr className="contact-divider"/>
 
-            <form id="input-contact-container" action="https://api.web3forms.com/submit" method="POST">
+                <form id="input-contact-container" action="https://api.web3forms.com/submit" method="POST">
                 <div id="sender-contact-info">
 
                     {/*Replace with your Access Key*/}
@@ -52,9 +54,8 @@ export default function Contact() {
 
                 <button type="submit">Submit</button>
 
-            </form>
-
-
-        </div>
+                </form>
+            </div>
+        </main>
     );
 }

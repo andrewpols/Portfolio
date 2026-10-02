@@ -1,4 +1,4 @@
-import resumePDF from "../img/AndrewPolsResume-ASIP-July9-2025.pdf"
+import resumePDF from "../img/AndrewPolsResume.pdf"
 
 export default function Resume() {
     return (
