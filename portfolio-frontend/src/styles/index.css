@@ -114,6 +114,10 @@ a, button, input, textarea {
 
 /* Touch screens: standalone links get a 44px tap area without changing how they look. */
 @media (pointer: coarse) {
-    .wordmark, .project-link, .contact-field, .footer-links a { display: inline-flex; align-items: center; min-height: 44px; }
+    .wordmark, .contact-field, .footer-links a { display: inline-flex; align-items: center; min-height: 44px; }
     .music-title, .music-artist-chip { padding-block: 0.25rem; }
+    /* .project-link draws its underline as a border, so a taller box would push the line away from the text.
+       Keep the box tight and extend the tap area with a pseudo-element instead. */
+    .project-link { position: relative; }
+    .project-link::after { content: ""; position: absolute; inset: -0.7rem 0; }
 }

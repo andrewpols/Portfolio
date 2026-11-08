@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from "react";
 
 import "../styles/layout.css";
 import { ArrowUpRight, MenuIcon } from "./Icons.jsx";
+import useScrollRestore from "./useScrollRestore.js";
 
 const links = [
     { to: "/", label: "Home", end: true },
@@ -14,7 +15,7 @@ const links = [
 const titles = { "/": "Andrew Pols", "/portfolio": "Work · Andrew Pols", "/contact": "Contact · Andrew Pols", "/resume": "Resume · Andrew Pols" };
 
 export default function Layout() {
-    const { pathname } = useLocation();
+    const { pathname, key } = useLocation();
 
     useEffect(() => {
         document.title = titles[pathname.replace(/\/$/, "") || "/"] ?? "Not found · Andrew Pols";
@@ -43,11 +44,25 @@ export default function Layout() {
         };
     }, [open]);
 
+    useScrollRestore(scrollerRef, pathname);
+
+    // Every navigation starts at the top, including clicking a link to the page you're already on (the
+    // wordmark on Home). The location key changes each time. The initial key is the page load, where a
+    // refresh keeps its position. Staying on the same page glides up; arriving on a different page jumps,
+    // since animating over content that just swapped would only show the new page scrolling.
+    const lastKey = useRef(key);
+    const lastPath = useRef(pathname);
     useEffect(() => {
-        scrollerRef.current?.scrollTo({ top: 0, left: 0, behavior: "instant" });
-        window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+        if (lastKey.current === key) return;
+        const samePage = lastPath.current === pathname;
+        lastKey.current = key;
+        lastPath.current = pathname;
+        const glide = samePage && !window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+        const behavior = glide ? "smooth" : "instant";
+        scrollerRef.current?.scrollTo({ top: 0, left: 0, behavior });
+        window.scrollTo({ top: 0, left: 0, behavior });
         setOpen(false);
-    }, [pathname]);
+    }, [key, pathname]);
 
     return (
         <div id="Layout">
