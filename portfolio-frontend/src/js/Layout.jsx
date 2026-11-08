@@ -1,140 +1,100 @@
-import { NavLink, Outlet, useLocation } from "react-router-dom";
+import { NavLink, Link, Outlet, useLocation } from "react-router-dom";
+import { useEffect, useRef, useState } from "react";
 
 import "../styles/layout.css";
+import { ArrowUpRight, MenuIcon } from "./Icons.jsx";
 
-import { useLayoutEffect } from "react";
+const links = [
+    { to: "/", label: "Home", end: true },
+    { to: "/portfolio", label: "Work" },
+    { to: "/contact", label: "Contact" },
+    { to: "/resume", label: "Resume", external: true },
+];
 
-
-import { IoMdClose } from "react-icons/io";
-import { RiMenu3Fill } from "react-icons/ri";
-
-
-import githubIcon from "../img/github-mark.svg";
-import linkedinIcon from "../img/iconmonstr-linkedin-3.svg";
-import blueIcon from "/favicon_io/apple-touch-icon.png";
-
-import { scrollToElement } from "./utilities.js";
-
+const titles = { "/": "Andrew Pols", "/portfolio": "Work · Andrew Pols", "/contact": "Contact · Andrew Pols", "/resume": "Resume · Andrew Pols" };
 
 export default function Layout() {
+    const { pathname } = useLocation();
 
-    const location = useLocation();
+    useEffect(() => {
+        document.title = titles[pathname.replace(/\/$/, "") || "/"] ?? "Not found · Andrew Pols";
+    }, [pathname]);
+    const [open, setOpen] = useState(false);
+    const isResume = pathname === "/resume";
+    const toggleRef = useRef(null);
+    const scrollerRef = useRef(null);
+    const navRef = useRef(null);
 
-    useLayoutEffect(() => {
-        if (location.pathname === "/resume") {
-            document.getElementById("header").style.visibility = "hidden";
-            document.getElementById("footer").style.display = "none";
-        } else {
-            document.getElementById("header").style.visibility = "visible";
-            document.getElementById("footer").style.display = ""; // "" reverts to CSS default
-        }
+    useEffect(() => {
+        if (!open) return;
+        const onKey = (e) => {
+            if (e.key === "Escape") {
+                setOpen(false);
+                toggleRef.current?.focus();
+            }
+        };
+        document.addEventListener("keydown", onKey);
+        navRef.current?.querySelector("a")?.focus();
+        return () => document.removeEventListener("keydown", onKey);
+    }, [open]);
 
-        window.scrollTo({
-            top: 0,
-            left: 0,
-            behavior: "instant"
-        });
-    }, [location.pathname]);
-
-
-
-    const handleMenuToggle = () => {
-        const menu = document.getElementById("menu");
-
-        menu.classList.toggle("shown")
-    }
-
+    useEffect(() => {
+        scrollerRef.current?.scrollTo({ top: 0, left: 0, behavior: "instant" });
+        setOpen(false);
+    }, [pathname]);
 
     return (
-        <>
-            <div id="Layout">
-                <nav id="header">
-                    <div id="big-screen-header">
-                        <div id="brand-wrapper">
-                            <NavLink id="desktop-brand-link" to="/" className={({isActive}) => isActive ? "active" : ""} onClick={() => scrollToElement("welcome-section")}>
-                                <img id="desktop-brand-icon" src={blueIcon} alt="brand"/>
+        <div id="Layout">
+            {!isResume && <a href="#outlet" className="skip-link" onClick={(e) => { e.preventDefault(); document.getElementById("outlet")?.focus(); }}>Skip to content</a>}
+            {!isResume && (
+                <header id="header">
+                    <Link to="/" className="wordmark" aria-label="Andrew Pols, home">Andrew Pols</Link>
+
+                    <button
+                        ref={toggleRef}
+                        className="menu-toggle"
+                        aria-label={open ? "Close menu" : "Open menu"}
+                        aria-expanded={open}
+                        aria-controls="site-nav"
+                        onClick={() => setOpen((o) => !o)}
+                    >
+                        <MenuIcon open={open} />
+                    </button>
+
+                    <nav id="site-nav" ref={navRef} className={open ? "open" : ""} aria-label="Primary">
+                        {links.map((l) => (
+                            <NavLink
+                                key={l.to}
+                                to={l.to}
+                                end={l.end}
+                                target={l.external ? "_blank" : undefined}
+                                className={({ isActive }) => "nav-link" + (isActive ? " active" : "")}
+                            >
+                                {l.label}{l.external && <ArrowUpRight />}
                             </NavLink>
-                        </div>
-                        
-                        <div id="middle-cluster">
-                            <ul id="big-screen-list">
-                                <li>
-                                    <NavLink className={({isActive}) => "header-link" + (isActive ? " active" : "")} to="/">
-                                        Home
-                                    </NavLink>
-                                </li>
-                                <li>
-                                    <NavLink className={({isActive}) => "header-link" + (isActive ? " active" : "")} to="/portfolio">
-                                        Experience
-                                    </NavLink>
-                                </li>
-                                <li>
-                                    <NavLink className={({isActive}) => "header-link header-external" + (isActive ? " active" : "")} to="/resume" target="_blank">
-                                        Resume
-                                    </NavLink>
-                                </li>
-                            </ul>
-                        </div>
+                        ))}
+                    </nav>
+                </header>
+            )}
 
-                        <div id="resume-wrapper">
-                            <NavLink className={({isActive}) => "header-link" + (isActive ? " active" : "")} to="/contact">
-                                Contact
-                            </NavLink>
+            <div id="scroller" ref={scrollerRef}>
+            <main id="outlet" tabIndex={-1} className={isResume ? "is-resume" : ""}>
+                <Outlet />
+            </main>
+
+            {!isResume && (
+                <footer id="footer">
+                    <div className="footer-row">
+                        <p>&copy; 2026 Andrew Pols</p>
+                        <div className="footer-links">
+                            <a href="https://github.com/andrewpols" target="_blank" rel="noreferrer">GitHub<ArrowUpRight /></a>
+                            <a href="https://www.linkedin.com/in/andrewpols/" target="_blank" rel="noreferrer">LinkedIn<ArrowUpRight /></a>
+                            <a href="mailto:andrew.pols@mail.utoronto.ca">Email</a>
                         </div>
                     </div>
-
-                    <div id="small-screen-header">
-                        <NavLink id="mobile-brand-link" to="/" onClick={() => scrollToElement("welcome-section")} aria-label="Home">
-                            <img id="brand-icon" src={blueIcon} alt="brand"/>
-                        </NavLink>
-                        <button className="icon-button" id="menu-btn" onClick={handleMenuToggle}>
-                            <RiMenu3Fill/>
-                        </button>
-
-                        <div id="menu">
-                            <button id="close-menu-btn" className="icon-button" onClick={handleMenuToggle}>
-                                <IoMdClose/>
-                            </button>
-                            <ul id="menu-items">
-                                <li><NavLink to="/" onClick={handleMenuToggle} className={({isActive}) => isActive ? "active" : ""}>Home</NavLink></li>
-                                <li><NavLink to="/portfolio" onClick={handleMenuToggle} className={({isActive}) => isActive ? "active" : ""}>Experience</NavLink></li>
-                                <li><NavLink to="/contact" onClick={handleMenuToggle} className={({isActive}) => isActive ? "active" : ""}>Contact</NavLink></li>
-                                <li><NavLink to="/resume" target="_blank" onClick={handleMenuToggle} className={({isActive}) => isActive ? "active" : ""}>Resume</NavLink></li>
-                            </ul>
-                        </div>
-                    </div>
-
-                </nav>
-
-                <div id="outlet">
-                    <Outlet/>
-                </div>
-
-                <div id="footer">
-                    <div id="copyright-text">
-                        <p>&copy; 2026 Andrew Pols. All Rights Reserved.</p>
-                    </div>
-
-                    <div id="external-socials-container">
-                        <a className="external-social-link" href="http://www.github.com/andrewpols" target="_blank">
-                            <div className="external-social">
-                                <img src={githubIcon} alt="github-icon"/>
-                                <h3 className="external-social-text">GitHub</h3>
-                            </div>
-                        </a>
-
-                        <a className="external-social-link" href="https://www.linkedin.com/in/andrewpols/"
-                           target="_blank">
-                            <div className="external-social">
-                                <img src={linkedinIcon} alt="linkedin-icon"/>
-                                <h3 className="external-social-text">LinkedIn</h3>
-                            </div>
-                        </a>
-
-                    </div>
-
-                </div>
+                </footer>
+            )}
             </div>
-        </>
+        </div>
     );
 }

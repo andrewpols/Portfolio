@@ -3,9 +3,9 @@ import {BrowserRouter, Route, Routes} from "react-router-dom";
 import Layout from "./Layout.jsx";
 import Home from "./Home.jsx";
 import Portfolio from "./Portfolio.jsx";
-import About from "./About.jsx";
 import Resume from "./Resume.jsx";
 import Contact from "./Contact.jsx";
+import NotFound from "./NotFound.jsx";
 
 
 import '../styles/App.css';
@@ -20,13 +20,11 @@ function MainRoutes() {
 
                     <Route path="portfolio" element={<Portfolio />} />
 
-                    <Route path="about" element={<About />}/>
-
                     <Route path="resume" element={<Resume />} />
 
                     <Route path="contact" element={<Contact />}/>
 
-                    <Route path="*" element={<Home />} />
+                    <Route path="*" element={<NotFound />} />
                 </Route>
             </Routes>
         </BrowserRouter>

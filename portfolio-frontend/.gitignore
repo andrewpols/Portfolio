@@ -1,3 +1,7 @@
+# dev
+.env.local
+.impeccable/
+
 # Logs
 logs
 *.log

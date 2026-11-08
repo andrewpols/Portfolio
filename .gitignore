@@ -1,6 +1,8 @@
 git_push_server_command.txt
 nginx-info/
 
+PRODUCT.md
+
 # Logs
 logs
 *.log
