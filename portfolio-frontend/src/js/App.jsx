@@ -18,7 +18,7 @@ function MainRoutes() {
 
                     <Route index element={<Home />} />
 
-                    <Route path="portfolio" element={<Portfolio />} />
+                    <Route path="work" element={<Portfolio />} />
 
                     <Route path="resume" element={<Resume />} />
 

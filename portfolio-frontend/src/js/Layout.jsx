@@ -7,12 +7,12 @@ import useScrollRestore from "./useScrollRestore.js";
 
 const links = [
     { to: "/", label: "Home", end: true },
-    { to: "/portfolio", label: "Work" },
+    { to: "/work", label: "Work" },
     { to: "/contact", label: "Contact" },
     { to: "/resume", label: "Resume", external: true },
 ];
 
-const titles = { "/": "Andrew Pols", "/portfolio": "Work · Andrew Pols", "/contact": "Contact · Andrew Pols", "/resume": "Resume · Andrew Pols" };
+const titles = { "/": "Andrew Pols", "/work": "Work · Andrew Pols", "/contact": "Contact · Andrew Pols", "/resume": "Resume · Andrew Pols" };
 
 export default function Layout() {
     const { pathname, key, hash } = useLocation();

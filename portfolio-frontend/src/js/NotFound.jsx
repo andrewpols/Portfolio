@@ -8,7 +8,7 @@ export default function NotFound() {
             <p>There's nothing at this address.</p>
             <div className="hero-actions">
                 <Link to="/" className="btn btn-primary">Home</Link>
-                <Link to="/portfolio" className="btn">See my work</Link>
+                <Link to="/work" className="btn">See my work</Link>
             </div>
         </div>
     );

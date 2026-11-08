@@ -13,7 +13,7 @@ export default function Home() {
                     Third-year Computer Science student at the University of Toronto. Currently a software developer intern at IBM on the Planning Analytics team.
                 </p>
                 <div className="hero-actions">
-                    <Link to="/portfolio" className="btn btn-primary">View my work</Link>
+                    <Link to="/work" className="btn btn-primary">View my work</Link>
                     <Link to="/resume" target="_blank" className="btn">Resume<ArrowUpRight /></Link>
                 </div>
             </section>
