@@ -15,7 +15,7 @@ const links = [
 const titles = { "/": "Andrew Pols", "/portfolio": "Work · Andrew Pols", "/contact": "Contact · Andrew Pols", "/resume": "Resume · Andrew Pols" };
 
 export default function Layout() {
-    const { pathname, key } = useLocation();
+    const { pathname, key, hash } = useLocation();
 
     useEffect(() => {
         document.title = titles[pathname.replace(/\/$/, "") || "/"] ?? "Not found · Andrew Pols";
@@ -57,12 +57,14 @@ export default function Layout() {
         const samePage = lastPath.current === pathname;
         lastKey.current = key;
         lastPath.current = pathname;
+        // In-page anchor links (the Work index) change the location too; let the browser scroll to the target.
+        if (samePage && hash) return;
         const glide = samePage && !window.matchMedia("(prefers-reduced-motion: reduce)").matches;
         const behavior = glide ? "smooth" : "instant";
         scrollerRef.current?.scrollTo({ top: 0, left: 0, behavior });
         window.scrollTo({ top: 0, left: 0, behavior });
         setOpen(false);
-    }, [key, pathname]);
+    }, [key, pathname, hash]);
 
     return (
         <div id="Layout">

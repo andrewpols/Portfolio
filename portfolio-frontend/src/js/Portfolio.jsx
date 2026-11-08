@@ -4,11 +4,23 @@ import Experiences from "./Experiences.jsx";
 import { ArrowDown } from "./Icons.jsx";
 import { projects, experiences } from "./workData.js";
 
-// Hash links scroll the page but leave keyboard focus on the index; move it to the target too.
+// Hash links scroll the page but leave keyboard focus on the index; move it to the target too. Focusing
+// while the smooth scroll is still running can cancel or jump it (iOS Safari), so wait for it to finish.
 function focusTarget(e) {
     const link = e.target.closest("a[href^='#']");
     const target = link && document.getElementById(link.hash.slice(1));
-    if (target) target.focus({ preventScroll: true });
+    if (!target) return;
+    let done = false;
+    const focus = () => {
+        if (done) return;
+        done = true;
+        document.removeEventListener("scrollend", focus, true);
+        clearTimeout(timer);
+        target.focus({ preventScroll: true });
+    };
+    // scrollend isn't everywhere yet, and doesn't fire if the page is already at the target.
+    const timer = setTimeout(focus, 900);
+    document.addEventListener("scrollend", focus, true);
 }
 
 export default function Portfolio() {

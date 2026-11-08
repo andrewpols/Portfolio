@@ -18,7 +18,8 @@ html { scroll-padding-top: 4.5rem; }
     #scroller { scroll-behavior: smooth; }
 }
 #outlet { flex: 1 0 auto; }
-#outlet:focus { outline: none; }
+#outlet:focus, #outlet article[tabindex="-1"]:focus { outline: none; }
+/* Programmatic focus targets only (skip link, Work index): focus moves for assistive tech, but a ring around a whole section is noise. */
 
 /* Hidden until a keyboard user tabs to it. */
 .skip-link {
