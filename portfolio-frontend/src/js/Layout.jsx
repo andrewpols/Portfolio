@@ -35,11 +35,17 @@ export default function Layout() {
         };
         document.addEventListener("keydown", onKey);
         navRef.current?.querySelector("a")?.focus();
-        return () => document.removeEventListener("keydown", onKey);
+        const prevOverflow = document.documentElement.style.overflow;
+        document.documentElement.style.overflow = "hidden";
+        return () => {
+            document.removeEventListener("keydown", onKey);
+            document.documentElement.style.overflow = prevOverflow;
+        };
     }, [open]);
 
     useEffect(() => {
         scrollerRef.current?.scrollTo({ top: 0, left: 0, behavior: "instant" });
+        window.scrollTo({ top: 0, left: 0, behavior: "instant" });
         setOpen(false);
     }, [pathname]);
 

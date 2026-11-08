@@ -24,7 +24,7 @@
     font: inherit;
 }
 #contact-container textarea { min-height: 9rem; resize: vertical; }
-#contact-container input:focus, #contact-container textarea:focus { outline: none; border-color: var(--accent); }
+#contact-container input:focus-visible, #contact-container textarea:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-color: var(--accent); }
 #input-contact-container button { align-self: flex-start; min-height: 2.9rem; padding: 0 1.8rem; border: 1px solid var(--accent); border-radius: 0; background: var(--accent); color: var(--on-accent); font: 600 0.95rem/1 "Schibsted Grotesk", sans-serif; cursor: pointer;}
 #input-contact-container button:hover { background: var(--ink); border-color: var(--ink); }
 
@@ -33,5 +33,5 @@
 .req { color: var(--accent); }
 .form-actions { display: flex; align-items: center; gap: 1.25rem; flex-wrap: wrap; }
 .form-status { font-size: 0.95rem; color: var(--ink-2); }
-.form-status.error { color: #f0a08e; }
+.form-status.error, .form-status.offline, .form-status.limited { color: var(--error); }
 #input-contact-container button:disabled { opacity: 0.6; cursor: progress; }

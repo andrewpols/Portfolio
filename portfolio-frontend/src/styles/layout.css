@@ -1,8 +1,22 @@
-/* The page scrolls inside #scroller, below the header, so the header spans the full width
-   and the scrollbar starts under it instead of beside it. */
-#Layout { height: 100vh; height: 100dvh; display: flex; flex-direction: column; overflow: hidden; }
-@media (prefers-reduced-motion: no-preference) { #scroller { scroll-behavior: smooth; } }
-#scroller { flex: 1; min-height: 0; overflow-y: auto; scrollbar-color: var(--rule-strong) var(--ground); display: flex; flex-direction: column; }
+/* Touch and narrow screens: the document itself scrolls, so the browser's pull-to-refresh, address-bar
+   collapse and momentum all work natively. The header sticks to the top. */
+#Layout { min-height: 100vh; min-height: 100dvh; display: flex; flex-direction: column; }
+#scroller { flex: 1; display: flex; flex-direction: column; }
+#header { position: sticky; top: 0; z-index: 5; }
+html { scroll-padding-top: 4.5rem; }
+@media (prefers-reduced-motion: no-preference) { html { scroll-behavior: smooth; } }
+
+/* Desktop with a mouse: the page scrolls inside #scroller, below the header, so the header spans the full
+   width and the scrollbar starts under it instead of beside it. */
+@media (hover: hover) and (pointer: fine) and (min-width: 761px) {
+    #Layout { height: 100vh; height: 100dvh; min-height: 0; overflow: hidden; }
+    #header { position: static; }
+    html { scroll-padding-top: 0; scroll-behavior: auto; }
+    #scroller { min-height: 0; overflow-y: auto; scrollbar-color: var(--rule-strong) var(--ground); }
+}
+@media (hover: hover) and (pointer: fine) and (min-width: 761px) and (prefers-reduced-motion: no-preference) {
+    #scroller { scroll-behavior: smooth; }
+}
 #outlet { flex: 1 0 auto; }
 #outlet:focus { outline: none; }
 

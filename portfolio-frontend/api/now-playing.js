@@ -50,14 +50,16 @@ export default async function handler(req, res) {
         `&api_key=${encodeURIComponent(LASTFM_API_KEY)}`;
 
     try {
+        const get = (query) => fetch(`${base}&${query}`, { signal: AbortSignal.timeout(8000) });
+        // Top artists are optional: if that call fails or times out, still return the recent tracks.
         const [recentRes, artistsRes] = await Promise.all([
-            fetch(`${base}&method=user.getrecenttracks&limit=30`),
-            fetch(`${base}&method=user.gettopartists&period=1month&limit=5`),
+            get("method=user.getrecenttracks&limit=30"),
+            get("method=user.gettopartists&period=1month&limit=5").catch(() => null),
         ]);
         if (!recentRes.ok) throw new Error(`Last.fm responded ${recentRes.status}`);
 
         const recentData = await recentRes.json();
-        const artistsData = artistsRes.ok ? await artistsRes.json() : null;
+        const artistsData = artistsRes?.ok ? await artistsRes.json().catch(() => null) : null;
 
         const tracks = uniqueTracks((recentData?.recenttracks?.track ?? []).map(shapeTrack));
         const topArtists = (artistsData?.topartists?.artist ?? []).map((a) => ({
@@ -68,12 +70,14 @@ export default async function handler(req, res) {
 
         res.setHeader("Cache-Control", "s-maxage=30, stale-while-revalidate=60");
 
+        if (!tracks[0]) return res.status(204).end(); // nothing played yet: the card stays hidden
+
         return res.status(200).json({
             track: tracks[0] ?? null,
             recent: tracks.slice(1, 1 + RECENT_COUNT),
             topArtists,
         });
-    } catch (err) {
+    } catch {
         return res.status(502).json({ error: "Failed to reach Last.fm" });
     }
 }

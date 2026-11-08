@@ -11,6 +11,7 @@
     --rule-strong: #403e39;
     --accent: #8fb0d8;
     --on-accent: #0c1118;
+    --error: #f0a08e;
 
     --gutter: clamp(1.25rem, 5vw, 4rem);
     /* Content, section rules and footer sit in a centred column capped at --page-max; the header's padding lines up with it. */

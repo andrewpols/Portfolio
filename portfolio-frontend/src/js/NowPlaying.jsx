@@ -33,10 +33,12 @@ export default function NowPlaying() {
 
     useEffect(() => {
         let cancelled = false;
+        const ctrl = new AbortController();
 
         async function load() {
+            if (document.hidden) return; // don't poll from a background tab
             try {
-                const res = await fetch("/api/now-playing");
+                const res = await fetch("/api/now-playing", { signal: ctrl.signal });
                 if (!res.ok) return;
                 const json = await res.json();
                 if (!cancelled && json.track) setData(json);
@@ -47,9 +49,13 @@ export default function NowPlaying() {
 
         load();
         const id = setInterval(load, REFRESH_MS);
+        const onVisible = () => { if (!document.hidden) load(); };
+        document.addEventListener("visibilitychange", onVisible);
         return () => {
             cancelled = true;
+            ctrl.abort();
             clearInterval(id);
+            document.removeEventListener("visibilitychange", onVisible);
         };
     }, []);
 
