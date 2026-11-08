@@ -22,6 +22,7 @@ function devApi(env) {
                 const out = {
                     status(code) { res.statusCode = code; return out },
                     setHeader(k, v) { res.setHeader(k, v) },
+                    end() { res.end() },
                     json(body) {
                         res.setHeader('Content-Type', 'application/json')
                         res.end(JSON.stringify(body))

@@ -1,5 +1,6 @@
 import "../styles/work.css";
 import { experiences } from "./workData.js";
+import { ArrowUpRight } from "./Icons.jsx";
 
 export default function Experiences() {
     return (
@@ -17,6 +18,9 @@ export default function Experiences() {
                         <ul className="experience-highlights">
                             {e.highlights.map((h, j) => <li key={j}>{h}</li>)}
                         </ul>
+                        {e.link && (
+                            <a href={e.link} target="_blank" rel="noreferrer" className="project-link">{e.linkLabel}<ArrowUpRight /></a>
+                        )}
                     </article>
                 ))}
             </div>

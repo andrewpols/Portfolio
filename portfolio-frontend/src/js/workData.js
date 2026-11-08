@@ -24,5 +24,7 @@ export const experiences = [
             "Worked with TM1 APIs to collect and process dependency data and turn it into a visual graph.",
             "Collaborated with engineers, designers, and product management to develop and refine the feature through the development process.",
         ],
+        link: "https://community.ibm.com/community/user/blogs/svetlana-pestsova/2026/10/21/see-how-your-model-fits-together-dependency-graph-now-available-for-modelers-in-planning-analytics-workbench",
+        linkLabel: "Read the dependency graph blog post",
     }
 ];
