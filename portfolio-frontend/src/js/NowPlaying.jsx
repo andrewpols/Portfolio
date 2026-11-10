@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import Reveal from "./Reveal.jsx";
 
-const REFRESH_MS = 30000;
+// The server caches for a few seconds too, so checking faster than this gains nothing.
+const REFRESH_MS = 10000;
 
 function timeAgo(uts) {
     const mins = Math.floor((Date.now() / 1000 - uts) / 60);
@@ -12,11 +13,20 @@ function timeAgo(uts) {
     return `${Math.floor(hrs / 24)}d ago`;
 }
 
-function Equalizer() {
+// Moving bars while a track is live, a pause icon when it isn't. Both are decorative: the status text carries the state.
+function PlaybackIcon({ live }) {
+    if (live) {
+        return (
+            <span className="eq" aria-hidden="true">
+                <i /><i /><i /><i />
+            </span>
+        );
+    }
     return (
-        <span className="eq" aria-hidden="true">
-            <i /><i /><i /><i />
-        </span>
+        <svg className="pause-icon" width="18" height="13" viewBox="0 0 18 13" fill="currentColor" aria-hidden="true">
+            <rect x="4" y="0" width="4" height="13" />
+            <rect x="10" y="0" width="4" height="13" />
+        </svg>
     );
 }
 
@@ -60,7 +70,7 @@ export default function NowPlaying() {
     }, []);
 
     if (!data) return null;
-    const { track, recent = [], topArtists = [] } = data;
+    const { track, recent = [], topArtists = [], topArtistsPeriod } = data;
     const live = track.nowPlaying;
 
     return (
@@ -69,12 +79,12 @@ export default function NowPlaying() {
         <div className="section-body">
         <div id="music-card" className={live ? "is-live" : ""}>
             <div className="music-feature">
-                <a href={track.url} target="_blank" rel="noreferrer" className="music-art-wrap" aria-label={`Open ${track.name} by ${track.artist} on Last.fm`}>
+                <a href={track.url} target="_blank" rel="noreferrer" className="music-art-wrap" aria-label={`Open ${track.name} by ${track.artist} on Spotify`}>
                     <Art src={track.image} className="music-art" />
                 </a>
                 <div className="music-meta">
                     <span className="music-status">
-                        <Equalizer />
+                        <PlaybackIcon live={live} />
                         {live ? "Listening now" : `Last played${track.playedAt ? ` · ${timeAgo(track.playedAt)}` : ""}`}
                     </span>
                     <a href={track.url} target="_blank" rel="noreferrer" className="music-title">
@@ -108,7 +118,7 @@ export default function NowPlaying() {
 
                 {topArtists.length > 0 && (
                     <div className="music-block">
-                        <p className="music-label">On repeat this month</p>
+                        <p className="music-label">{topArtistsPeriod === "recent" ? "On repeat lately" : "On repeat this month"}</p>
                         <div className="music-artists">
                             {topArtists.map((a) => (
                                 <a key={a.name} href={a.url} target="_blank" rel="noreferrer" className="music-artist-chip">

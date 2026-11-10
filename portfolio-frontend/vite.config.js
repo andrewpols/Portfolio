@@ -3,9 +3,11 @@ import {resolve} from 'node:path'
 import {defineConfig, loadEnv} from 'vite'
 import react from '@vitejs/plugin-react'
 import tailwindcss from '@tailwindcss/vite'
+import {mockNowPlaying} from './dev/mock-now-playing.js'
 
 // Serves /api/* handlers (Vercel-style) during `vite dev`
 function devApi(env) {
+    const mockStartedAt = Date.now()
     return {
         name: 'dev-api',
         configureServer(server) {
@@ -17,6 +19,12 @@ function devApi(env) {
             })
 
             server.middlewares.use('/api/now-playing', async (req, res) => {
+                // NOW_PLAYING_MOCK=1 serves fake songs and never calls Spotify (see dev/mock-now-playing.js).
+                if (env.NOW_PLAYING_MOCK === '1') {
+                    res.setHeader('Content-Type', 'application/json')
+                    res.end(JSON.stringify(mockNowPlaying(mockStartedAt)))
+                    return
+                }
                 Object.assign(process.env, env)
                 const {default: handler} = await server.ssrLoadModule('/api/now-playing.js')
                 const out = {

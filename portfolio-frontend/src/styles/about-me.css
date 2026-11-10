@@ -87,11 +87,53 @@
 .music-album { font-size: 0.85rem; color: var(--ink-3); }
 
 .eq { display: inline-flex; align-items: flex-end; gap: 2px; height: 13px; }
-.eq i { width: 3px; background: currentColor; border-radius: 0; }
-.eq i:nth-child(1) { height: 60%; }
-.eq i:nth-child(2) { height: 100%; }
-.eq i:nth-child(3) { height: 40%; }
-.eq i:nth-child(4) { height: 80%; }
+.eq i {
+    width: 3px;
+    height: 100%;
+    background: currentColor;
+    border-radius: 0;
+    transform-origin: bottom;
+    transform: scaleY(var(--hi)); /* resting pose, also what reduced-motion users see */
+}
+.eq i:nth-child(1) { --hi: 0.6; }
+.eq i:nth-child(2) { --hi: 1; }
+.eq i:nth-child(3) { --hi: 0.4; }
+.eq i:nth-child(4) { --hi: 0.8; }
+.pause-icon { display: block; flex-shrink: 0; }
+
+/* Each bar rides its own four-point path with wide, uneven swings, about 0.4s between points, eased smoothly.
+   Loop lengths differ per bar so the four drift in and out of step instead of pulsing together. */
+@keyframes eq-1 {
+    0%, 100% { transform: scaleY(0.3); }
+    25% { transform: scaleY(0.9); }
+    50% { transform: scaleY(0.45); }
+    75% { transform: scaleY(0.7); }
+}
+@keyframes eq-2 {
+    0%, 100% { transform: scaleY(0.55); }
+    20% { transform: scaleY(1); }
+    45% { transform: scaleY(0.35); }
+    70% { transform: scaleY(0.85); }
+}
+@keyframes eq-3 {
+    0%, 100% { transform: scaleY(0.25); }
+    30% { transform: scaleY(0.75); }
+    55% { transform: scaleY(0.3); }
+    80% { transform: scaleY(0.6); }
+}
+@keyframes eq-4 {
+    0%, 100% { transform: scaleY(0.45); }
+    22% { transform: scaleY(0.85); }
+    48% { transform: scaleY(0.3); }
+    74% { transform: scaleY(0.95); }
+}
+@media (prefers-reduced-motion: no-preference) {
+    .eq i { animation-timing-function: ease-in-out; animation-iteration-count: infinite; }
+    .eq i:nth-child(1) { animation-name: eq-1; animation-duration: 1.4s; }
+    .eq i:nth-child(2) { animation-name: eq-2; animation-duration: 1.8s; animation-delay: -0.6s; }
+    .eq i:nth-child(3) { animation-name: eq-3; animation-duration: 1.2s; animation-delay: -0.9s; }
+    .eq i:nth-child(4) { animation-name: eq-4; animation-duration: 1.6s; animation-delay: -0.3s; }
+}
 
 .music-side { display: flex; flex-direction: column; gap: 1.5rem; min-width: 0; padding-left: 2.5rem; border-left: 1px solid var(--rule); }
 .music-label { margin-bottom: 0.75rem; font-size: 0.85rem; color: var(--ink-3); }
