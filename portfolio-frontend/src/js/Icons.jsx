@@ -7,18 +7,11 @@ export function ArrowUpRight({ size = 14 }) {
     );
 }
 
-export function MenuIcon({ open }) {
+// Marks a still image that plays a short video on hover.
+export function PlayBadge() {
     return (
-        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="square" aria-hidden="true" focusable="false">
-            {open ? <path d="M4 4l12 12M16 4L4 16" /> : <path d="M3 6h14M3 10h14M3 14h14" />}
-        </svg>
-    );
-}
-
-export function ArrowDown({ size = 14 }) {
-    return (
-        <svg className="icon-arrow" width={size} height={size} viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="square" aria-hidden="true" focusable="false">
-            <path d="M8 3v10M3.5 8.5L8 13l4.5-4.5" />
-        </svg>
+        <span className="play-badge" aria-hidden="true">
+            <svg width="10" height="11" viewBox="0 0 10 11" fill="currentColor" focusable="false"><path d="M1 0.8v9.4a.5.5 0 0 0 .76.43l7.6-4.7a.5.5 0 0 0 0-.86L1.76.37A.5.5 0 0 0 1 .8z" /></svg>
+        </span>
     );
 }

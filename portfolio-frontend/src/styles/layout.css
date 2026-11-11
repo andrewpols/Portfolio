@@ -1,150 +1,42 @@
-/* Touch and narrow screens: the document itself scrolls, so the browser's pull-to-refresh, address-bar
-   collapse and momentum all work natively. The header sticks to the top. */
 #Layout { min-height: 100vh; min-height: 100dvh; display: flex; flex-direction: column; }
-#scroller { flex: 1; display: flex; flex-direction: column; }
-#header { position: sticky; top: 0; z-index: 5; }
-html { scroll-padding-top: 4.5rem; }
-@media (prefers-reduced-motion: no-preference) { html { scroll-behavior: smooth; } }
-
-/* Desktop with a mouse: the page scrolls inside #scroller, below the header, so the header spans the full
-   width and the scrollbar starts under it instead of beside it. */
-@media (hover: hover) and (pointer: fine) and (min-width: 761px) {
-    #Layout { height: 100vh; height: 100dvh; min-height: 0; overflow: hidden; }
-    #header { position: static; }
-    html { scroll-padding-top: 0; scroll-behavior: auto; }
-    #scroller { min-height: 0; overflow-y: auto; scrollbar-color: var(--rule-strong) var(--ground); }
-}
-@media (hover: hover) and (pointer: fine) and (min-width: 761px) and (prefers-reduced-motion: no-preference) {
-    #scroller { scroll-behavior: smooth; }
-}
 #outlet { flex: 1 0 auto; }
+#Layout > .page { width: 100%; }
 #outlet:focus, #outlet article[tabindex="-1"]:focus { outline: none; }
-/* Programmatic focus targets only (skip link, Work index): focus moves for assistive tech, but a ring around a whole section is noise. */
 
 /* Hidden until a keyboard user tabs to it. */
-.skip-link {
-    position: absolute;
-    top: 0.75rem;
-    left: var(--gutter);
-    z-index: 10;
-    padding: 0.6rem 1rem;
-    background: var(--ink);
-    color: var(--ground);
-    font-weight: 600;
-    transform: translateY(-200%);
-}
+.skip-link { position: absolute; top: 0.75rem; left: var(--gutter); z-index: 10; padding: 0.6rem 1rem; background: var(--ink); color: var(--ground); font-weight: 600; transform: translateY(-200%); }
 .skip-link:focus { transform: none; }
 
-#header {
-    flex: none;
-    height: 4.5rem;
-    box-sizing: border-box;
-    padding: 0 var(--page-pad);
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    background: var(--ground);
-    border-bottom: 1px solid var(--rule-strong);
-}
-
-.wordmark {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.6rem;
-    font: 600 1.05rem/1 var(--display);
-    letter-spacing: -0.01em;
-}
-
-#site-nav { display: flex; align-items: center; gap: clamp(1.25rem, 3vw, 2.25rem); }
-.nav-link {
-    position: relative;
-    padding: 0.35rem 0;
-    font-size: 0.95rem;
-    color: var(--ink-2);
-}
-.nav-link::after {
-    content: "";
-    position: absolute;
-    left: 0; right: 0; bottom: 0;
-    height: 1px;
-    background: var(--accent);
-    display: none;
-}
-.nav-link:hover, .nav-link.active { color: var(--ink); }
-/* Hover previews with a neutral underline; the current page keeps the accent one. */
-.nav-link:hover::after { display: block; background: var(--ink-3); }
-.nav-link.active::after { display: block; background: var(--accent); }
-
-.menu-toggle {
-    display: none;
-    min-width: 2.75rem;
-    min-height: 2.75rem;
-    padding: 0;
-    /* No box: the icon alone, with the 44px hit area pulled out so the bars align to the page gutter. */
-    margin-right: -0.75rem;
-    align-items: center;
-    justify-content: center;
-    border: 0;
-    border-radius: 0;
-    background: transparent;
-    color: var(--ink);
-    font: 500 0.9rem/1 "Schibsted Grotesk", sans-serif;
-    cursor: pointer;
-}
-
-#footer {
-    margin-top: 2rem;
-    padding: 2rem var(--gutter) 2rem;
-    border-top: 1px solid var(--rule);
-    max-width: var(--page-max);
-    margin-inline: auto;
-    box-sizing: border-box;
-    width: 100%;
-}
-.footer-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: baseline;
-    flex-wrap: wrap;
-    gap: 1rem 2rem;
-    font-size: 0.9rem;
-    color: var(--ink-3);
-}
-.footer-links { display: flex; gap: 1.75rem; }
-.footer-links a { color: var(--ink-2);}
-.footer-links a:hover { color: var(--accent); }
-
-@media (max-width: 760px) {
-    .menu-toggle { display: inline-flex; align-items: center; }
-    #site-nav {
-        position: fixed;
-        inset: 4.5rem 0 0 0;
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 0;
-        padding: 1.5rem var(--gutter);
-        background: var(--ground);
-        visibility: hidden;
+/* Sticky header. The name and a hairline fade in once the page's own heading has scrolled away. */
+#header { position: sticky; top: 0; z-index: 5; background: var(--ground); }
+.header-inner { display: flex; justify-content: space-between; align-items: center; gap: 1rem; padding-block: 1rem; box-sizing: border-box; }
+.wordmark { font: 500 1.125rem/1.2 var(--serif); letter-spacing: -0.01em; white-space: nowrap; opacity: 0; pointer-events: none; }
+/* The hairline runs the full width of the bar. */
+#header::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 1px; background: var(--rule-strong); opacity: 0; }
+@supports (animation-timeline: scroll()) {
+    @media (prefers-reduced-motion: no-preference) {
+        .wordmark, #header::after { animation: header-in linear both; animation-timeline: scroll(root); animation-range: 120px 220px; }
     }
-    #site-nav.open { visibility: visible; }
-    .nav-link { font: 600 2.25rem/1 var(--display); letter-spacing: -0.03em; padding: 0.6rem 0; color: var(--ink); }
+}
+@keyframes header-in { to { opacity: 1; pointer-events: auto; } }/* Without scroll-driven animation, or with reduced motion, the bar is simply always in its scrolled state. */
+@supports not (animation-timeline: scroll()) { .wordmark, #header::after { opacity: 1; pointer-events: auto; } }
+@media (prefers-reduced-motion: reduce) { .wordmark, #header::after { opacity: 1; pointer-events: auto; } }
+#site-nav { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 0.35rem 1.5rem; margin-left: auto; font: 500 0.9375rem/1.4 var(--sans); }
+.nav-link { color: var(--ink-2); }
+.nav-link:hover { color: var(--accent); }
+/* Phones: the five links share one row, spread across the full width, and the type scales down just enough that "resume" never wraps. */
+@media (max-width: 40rem) {
+    .wordmark { display: none; }
+    #site-nav { flex: 1; flex-wrap: nowrap; justify-content: space-between; gap: 0.5rem; font-size: clamp(0.75rem, 3.7vw, 0.9375rem); }
+    .nav-link { white-space: nowrap; }
+    .nav-link .icon-arrow { margin-left: 0.15em; }
 }
 
-.footer-links a, .footer-links a:visited { display: inline-block; padding: 0.7rem 0; }
+#contact-section { margin-top: clamp(3rem, 8vw, 5rem); padding-block: 0 2.5rem; }
+.footer-row { padding-top: 1.25rem; border-top: 1px solid var(--rule-strong); display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: 0.5rem 1.5rem; font: 400 0.875rem/1.5 var(--sans); color: var(--ink-3); }
+.footer-links { display: flex; flex-wrap: wrap; gap: 0.25rem 1.25rem; }
+.footer-links a { color: var(--ink-2); }
 
 /* Resume on touch screens: the site header is hidden, so this slim bar carries back + download. */
-.resume-bar {
-    position: sticky;
-    top: 0;
-    z-index: 1;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    height: 3rem;
-    box-sizing: border-box;
-    padding: 0 var(--gutter);
-    background: var(--ground);
-    border-bottom: 1px solid var(--rule-strong);
-    font-size: 0.95rem;
-}
+.resume-bar { position: sticky; top: 0; z-index: 1; display: flex; justify-content: space-between; align-items: center; height: 3rem; box-sizing: border-box; padding: 0 var(--gutter); background: var(--ground); border-bottom: 1px solid var(--rule-strong); font-size: 0.95rem; }
 .resume-bar a { display: inline-flex; align-items: center; min-height: 2.75rem; color: var(--ink); }

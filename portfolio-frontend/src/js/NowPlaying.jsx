@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import Reveal from "./Reveal.jsx";
 
 // The server caches for a few seconds too, so checking faster than this gains nothing.
 const REFRESH_MS = 10000;
@@ -23,9 +22,9 @@ function PlaybackIcon({ live }) {
         );
     }
     return (
-        <svg className="pause-icon" width="18" height="13" viewBox="0 0 18 13" fill="currentColor" aria-hidden="true">
-            <rect x="4" y="0" width="4" height="13" />
-            <rect x="10" y="0" width="4" height="13" />
+        <svg className="pause-icon" width="10" height="13" viewBox="0 0 10 13" fill="currentColor" aria-hidden="true">
+            <rect x="0" y="0" width="3.5" height="13" />
+            <rect x="6.5" y="0" width="3.5" height="13" />
         </svg>
     );
 }
@@ -73,64 +72,56 @@ export default function NowPlaying() {
     const { track, recent = [], topArtists = [], topArtistsPeriod } = data;
     const live = track.nowPlaying;
 
+    // Hidden until the data arrives. The track now playing (or last played) leads, then recent plays and top artists.
     return (
-        <Reveal as="section" id="music-section" className="section">
-        <h2 className="section-label">Listening</h2>
-        <div className="section-body">
-        <div id="music-card" className={live ? "is-live" : ""}>
-            <div className="music-feature">
+        <section id="music-section" className="page block">
+        <h2 className="block-title">Listening</h2>
+        <div className="block-body">
+            <div id="music-card" className={live ? "is-live" : ""}>
                 <a href={track.url} target="_blank" rel="noreferrer" className="music-art-wrap" aria-label={`Open ${track.name} by ${track.artist} on Spotify`}>
                     <Art src={track.image} className="music-art" />
+                    <span className="music-badge"><PlaybackIcon live={live} /></span>
                 </a>
                 <div className="music-meta">
                     <span className="music-status">
-                        <PlaybackIcon live={live} />
                         {live ? "Listening now" : `Last played${track.playedAt ? ` · ${timeAgo(track.playedAt)}` : ""}`}
                     </span>
-                    <a href={track.url} target="_blank" rel="noreferrer" className="music-title">
-                        {track.name}
-                    </a>
+                    <a href={track.url} target="_blank" rel="noreferrer" className="music-title">{track.name}</a>
                     <span className="music-artist">{track.artist}</span>
-                    {track.album && <span className="music-album">{track.album}</span>}
                 </div>
             </div>
 
-            <div className="music-side">
-                {recent.length > 0 && (
-                    <div className="music-block">
-                        <p className="music-label">Recently played</p>
-                        <ul className="music-recent">
-                            {recent.map((t, i) => (
-                                <li key={`${t.url}-${i}`}>
-                                    <a href={t.url} target="_blank" rel="noreferrer">
-                                        <Art src={t.image} className="music-mini-art" />
-                                        <span className="music-mini-info">
-                                            <span className="music-mini-title">{t.name}</span>
-                                            <span className="music-mini-artist">{t.artist}</span>
-                                        </span>
-                                        {t.playedAt && <span className="music-mini-time">{timeAgo(t.playedAt)}</span>}
-                                    </a>
-                                </li>
-                            ))}
-                        </ul>
-                    </div>
-                )}
-
-                {topArtists.length > 0 && (
-                    <div className="music-block">
-                        <p className="music-label">{topArtistsPeriod === "recent" ? "On repeat lately" : "On repeat this month"}</p>
-                        <div className="music-artists">
-                            {topArtists.map((a) => (
-                                <a key={a.name} href={a.url} target="_blank" rel="noreferrer" className="music-artist-chip">
-                                    {a.name}
+            {recent.length > 0 && (
+                <div className="music-block">
+                    <p className="music-label">Recently played</p>
+                    <ul className="music-recent">
+                        {recent.map((t, i) => (
+                            <li key={`${t.url}-${i}`}>
+                                <a href={t.url} target="_blank" rel="noreferrer">
+                                    <Art src={t.image} className="music-mini-art" />
+                                    <span className="music-mini-info">
+                                        <span className="music-mini-title">{t.name}</span>
+                                        <span className="music-mini-artist">{t.artist}</span>
+                                    </span>
+                                    {t.playedAt && <span className="music-mini-time">{timeAgo(t.playedAt)}</span>}
                                 </a>
-                            ))}
-                        </div>
-                    </div>
-                )}
-            </div>
+                            </li>
+                        ))}
+                    </ul>
+                </div>
+            )}
+
+            {topArtists.length > 0 && (
+                <div className="music-block">
+                    <p className="music-label">{topArtistsPeriod === "recent" ? "On repeat lately" : "On repeat this month"}</p>
+                    <p className="music-artists">
+                        {topArtists.map((a) => (
+                            <a key={a.name} href={a.url} target="_blank" rel="noreferrer" className="text-link">{a.name}</a>
+                        ))}
+                    </p>
+                </div>
+            )}
         </div>
-        </div>
-        </Reveal>
+        </section>
     );
 }

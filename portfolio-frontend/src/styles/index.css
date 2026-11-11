@@ -1,45 +1,53 @@
 @import "tailwindcss";
 
+/* Warm paper and ink, a serif voice for headings, a rust accent. Dark mode is a lamp-lit brown-black. */
 :root {
-    --ground: #0f0f0e;
-    --surface: #171715;
-    --surface-2: #1f1e1b;
-    --ink: #ece8e0;
-    --ink-2: #b6b1a7;
-    --ink-3: #8f8a80;
-    --rule: #2a2926;
-    --rule-strong: #403e39;
-    --accent: #8fb0d8;
-    --on-accent: #0c1118;
-    --error: #f0a08e;
+    --ground: #f6f1e7;
+    --surface: #ece5d6;
+    --ink: #1f1a14;
+    --ink-2: #4d443a;
+    --ink-3: #6e6354;
+    --rule: #ddd4c1;
+    --rule-strong: #c4b8a1;
+    --accent: #a8391c;
+    --on-accent: #fff8ef;
 
-    --gutter: clamp(1.25rem, 5vw, 4rem);
-    /* Content, section rules and footer sit in a centred column capped at --page-max; the header's padding lines up with it. */
-    --page-max: 1440px;
-    --page-pad: max(var(--gutter), calc((100% - var(--page-max)) / 2 + var(--gutter)));
-    --label-col: clamp(9rem, 16vw, 14rem);
-    --display: "Schibsted Grotesk", "Helvetica Neue", Arial, sans-serif;
+    --gutter: clamp(1.25rem, 5vw, 2rem);
+    --wide: 58rem;
+    --rail: 8rem;
+    --sans: "Instrument Sans", "Helvetica Neue", Arial, sans-serif;
+    --serif: "Newsreader", Georgia, "Times New Roman", serif;
 
-    font-family: "Schibsted Grotesk", "Helvetica Neue", Arial, sans-serif;
+    font-family: var(--sans);
     line-height: 1.6;
     font-weight: 400;
-    color-scheme: dark;
+    color-scheme: light dark;
     font-synthesis: none;
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
 }
-
-html { margin: 0; background: var(--ground); }
-
-body {
-    margin: 0;
-    min-width: 320px;
-    min-height: 100vh;
-    color: var(--ink);
-    background: var(--ground);
+@media (prefers-color-scheme: dark) {
+    :root {
+        --ground: #181410;
+        --surface: #221d17;
+        --ink: #efe7d8;
+        --ink-2: #c0b5a2;
+        --ink-3: #9b8f7b;
+        --rule: #2e271f;
+        --rule-strong: #463c30;
+        --accent: #e8956b;
+        --on-accent: #1a0f08;
+    }
 }
 
+html { margin: 0; background: var(--ground); accent-color: var(--accent); caret-color: var(--accent); scrollbar-width: thin; scrollbar-color: var(--rule-strong) var(--ground); scroll-padding-top: 4.5rem; }
+@media (prefers-reduced-motion: no-preference) { html { scroll-behavior: smooth; } }
+
+/* Everything is sized in rem, so a slightly larger root scales type and layout together. Phones keep 16px. */
+@media (min-width: 56rem) { html { font-size: 103%; } }
+
+body { margin: 0; min-width: 320px; min-height: 100vh; color: var(--ink); background: var(--ground); }
 #root { width: 100%; }
 
 ::selection { background: var(--accent); color: var(--on-accent); }
@@ -47,78 +55,33 @@ body {
 a { color: inherit; text-decoration: none; }
 h1, h2, h3, h4, p { margin: 0; }
 ul { margin: 0; padding: 0; list-style: none; }
-
-h1, h2, h3, .display {
-    font-family: var(--display);
-    font-weight: 600;
-    letter-spacing: -0.025em;
-    line-height: 1.1;
-    text-wrap: balance;
-}
+h1, h2, h3 { font-family: var(--serif); font-weight: 500; letter-spacing: -0.01em; line-height: 1.15; text-wrap: balance; }
 
 :focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
 
-.btn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    min-height: 2.9rem;
-    padding: 0 1.4rem;
-    border: 1px solid var(--rule-strong);
-    border-radius: 0;
-    background: transparent;
-    color: var(--ink);
-    font: 500 0.95rem/1 "Schibsted Grotesk", sans-serif;
-    cursor: pointer;
-}
-.btn:hover { border-color: var(--ink); }
-.btn-primary { background: var(--ink); border-color: var(--ink); color: var(--ground); font-weight: 600; }
-.btn-primary:hover { background: var(--ink-2); border-color: var(--ink-2); }
+/* The one column every section sits in. */
+.page { max-width: var(--wide); margin: 0 auto; padding-inline: var(--gutter); box-sizing: border-box; }
 
-/* shared section pattern: label column + body column */
-.section {
-    display: grid;
-    grid-template-columns: var(--label-col) minmax(0, 1fr);
-    column-gap: clamp(1.5rem, 4vw, 4rem);
-    padding: clamp(3rem, 8vw, 6rem) var(--gutter);
-    border-top: 1px solid var(--rule);
-    max-width: var(--page-max);
-    margin: 0 auto;
-    box-sizing: border-box;
-}
-.section-label {
-    position: sticky;
-    top: 2rem;
-    align-self: start;
-    font-size: clamp(1.4rem, 2vw, 1.75rem);
-    color: var(--ink);
-}
-.section-body { min-width: 0; }
+/* Underlined text links, in the metadata voice. */
+.text-link { color: var(--accent); text-decoration: none; background: linear-gradient(currentColor, currentColor) 0 100% / 0 1px no-repeat; padding-bottom: 0.1em; transition: background-size 220ms cubic-bezier(0.22, 1, 0.36, 1); }
+.text-link:hover, .text-link:focus-visible { background-size: 100% 1px; }
+@media (prefers-reduced-motion: reduce) { .text-link { transition: none; } }
 
-@media (max-width: 820px) {
-    .section { grid-template-columns: 1fr; row-gap: 1.75rem; }
-    .section-label { position: static; }
+.icon-arrow { width: 0.8em; height: 0.8em; display: inline-block; margin-left: 0.25em; vertical-align: -0.05em; flex-shrink: 0; }
+
+/* Sections: the heading sits in a left rail, the content beside it. One column on small screens. */
+.block { margin-top: clamp(3rem, 8vw, 4.5rem); display: grid; grid-template-columns: minmax(0, 1fr); row-gap: 1.25rem; }
+.block-title { font-size: 1.5rem; }
+@media (min-width: 52rem) {
+    .block { grid-template-columns: var(--rail) minmax(0, 1fr); column-gap: 1.5rem; }
+    .block-title { padding-top: 0.15rem; }
 }
 
+a, button { transition: color 140ms ease, text-decoration-color 140ms ease, border-color 140ms ease; }
+@media (prefers-reduced-motion: reduce) { a, button { transition: none; } }
 
-.icon-arrow { width: 0.85em; height: 0.85em; display: inline-block; margin-left: 0.4em; vertical-align: -0.1em; flex-shrink: 0; }
-
-/* Feedback only: a short colour/border fade on interactive elements. Nothing moves, fades in or scrolls in. */
-a, button, input, textarea {
-    transition: color 140ms ease, background-color 140ms ease, border-color 140ms ease;
-}
-
-@media (prefers-reduced-motion: reduce) {
-    a, button, input, textarea { transition: none; }
-}
-
-/* Touch screens: standalone links get a 44px tap area without changing how they look. */
+/* Touch screens: small links get a 44px tap area without changing how they look. */
 @media (pointer: coarse) {
-    .wordmark, .footer-links a { display: inline-flex; align-items: center; min-height: 44px; }
-    .music-title, .music-artist-chip { padding-block: 0.25rem; }
-    /* .project-link draws its underline as a border, so a taller box would push the line away from the text.
-       Keep the box tight and extend the tap area with a pseudo-element instead. */
-    .project-link, .contact-field { position: relative; }
-    .contact-field::after { content: ""; position: absolute; inset: -0.7rem 0; }
-    .project-link::after { content: ""; position: absolute; inset: -0.7rem 0; }
+    .nav-link, .text-link, .footer-links a { position: relative; }
+    .nav-link::before, .text-link::before, .footer-links a::before { content: ""; position: absolute; inset: -0.75rem -0.4rem; }
 }

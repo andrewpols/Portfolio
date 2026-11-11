@@ -1,44 +1,71 @@
-import {useRef} from "react";
-
-
+import { Fragment } from "react";
 import "../styles/work.css";
 import { projects } from "./workData.js";
-import { ArrowUpRight } from "./Icons.jsx";
+import { ArrowUpRight, PlayBadge } from "./Icons.jsx";
+import usePreview from "./usePreview.js";
 
-function Project({project}) {
-    const videoRef = useRef(null);
-    const playPreview = () => {
-        if (videoRef.current && !window.matchMedia("(hover: none)").matches) videoRef.current.play();
-    };
-    const resetPreview = () => {
-        if (videoRef.current) {
-            videoRef.current.pause();
-            videoRef.current.currentTime = 0;
-        }
-    };
+// The tech stack: each item is its own unbreakable span, so a wrap never splits a name.
+function Stack({ stack }) {
+    return (
+        <p className="stack project-stack">
+            {stack.split(" · ").map((item, i) => <Fragment key={item}>{i > 0 && " "}<span>{item}</span></Fragment>)}
+        </p>
+    );
+}
+
+function ProjectName({ project }) {
+    return (
+        <h3 className="project-name">
+            <a href={project.link} target="_blank" rel="noreferrer" aria-label={`${project.name}, on GitHub`}>{project.name}<ArrowUpRight /></a>
+        </h3>
+    );
+}
+
+// The two lead projects: a preview over its text, side by side.
+function Featured({ project }) {
+    const { ref, shown, hover } = usePreview();
 
     return (
-        <article className="project" id={project.id} tabIndex={-1}>
-            <div className={`project-preview-container${project.previewVid ? " has-video" : ""}`} onMouseEnter={playPreview} onMouseLeave={resetPreview}>
-                <img src={project.previewImg} alt={project.alt} className="project-preview-frame"/>
-                {project.previewVid && <video ref={videoRef} src={project.previewVid} muted loop playsInline preload="none" poster={project.previewImg} aria-hidden="true" className="project-preview-video"/>}
+        <article className="project-feature" id={project.id} tabIndex={-1} {...hover}>
+            <div className={`preview${project.previewVid ? " has-video" : ""}${shown ? " is-playing" : ""}`}>
+                <img src={project.previewImg} alt={project.alt} className="preview-frame" loading="lazy" decoding="async"/>
+                {project.previewVid && <video ref={ref} src={project.previewVid} muted loop playsInline preload="none" poster={project.previewImg} aria-hidden="true" className="preview-video"/>}
+                {project.previewVid && <PlayBadge />}
             </div>
-            <div className="project-info-container">
-                <h3 className="project-name">{project.name}</h3>
-                <p className="project-desc">{project.description}</p>
-                <p className="project-stack">{project.stack}</p>
-                <a href={project.link} target="_blank" rel="noreferrer" className="project-link">View on GitHub<ArrowUpRight /></a>
-            </div>
+            <ProjectName project={project}/>
+            <p className="project-desc">{project.description}</p>
+            <Stack stack={project.stack}/>
         </article>
     );
 }
 
-export default function ProjectsComponent() {
+// The rest: a one-line mention each, name and stack.
+function Row({ project }) {
     return (
-        <section id="projects-section" className="section">
-            <h2 className="section-label">Projects</h2>
-            <div className="section-body" id="projects-container">
-                {projects.map((project) => <Project key={project.name} project={project}/>)}
+        <li>
+            <article className="project-row" id={project.id} tabIndex={-1}>
+                <ProjectName project={project}/>
+                <Stack stack={project.stack}/>
+                <p className="project-desc project-blurb">{project.blurb}</p>
+            </article>
+        </li>
+    );
+}
+
+export default function ProjectsComponent() {
+    const featured = projects.filter((p) => p.featured);
+    const rest = projects.filter((p) => !p.featured);
+
+    return (
+        <section id="projects-section" className="page block">
+            <h2 className="block-title">Projects</h2>
+            <div className="block-body" id="projects-container">
+                <div className="project-featured">
+                    {featured.map((project) => <Featured key={project.id} project={project}/>)}
+                </div>
+                <ul className="project-index">
+                    {rest.map((project) => <Row key={project.id} project={project}/>)}
+                </ul>
             </div>
         </section>
     );

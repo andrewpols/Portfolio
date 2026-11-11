@@ -1,55 +1,100 @@
-import { NavLink, Link, Outlet, useLocation } from "react-router-dom";
-import { useEffect, useRef, useState } from "react";
+import { Link, Outlet, useLocation } from "react-router-dom";
+import { useEffect, useRef } from "react";
 
 import "../styles/layout.css";
-import { ArrowUpRight, MenuIcon } from "./Icons.jsx";
-import useScrollRestore from "./useScrollRestore.js";
+import { ArrowUpRight } from "./Icons.jsx";
 
 const links = [
-    { to: "/", label: "Home", end: true },
-    { to: "/work", label: "Work" },
-    { to: "/contact", label: "Contact" },
-    { to: "/resume", label: "Resume", external: true },
+    { to: "/#experiences-section", label: "experience" },
+    { to: "/#education-section", label: "education" },
+    { to: "/#projects-section", label: "projects" },
+    { to: "/#about-me-section", label: "about" },
+    { to: "/resume", label: "resume", external: true },
 ];
 
-const titles = { "/": "Andrew Pols", "/work": "Work · Andrew Pols", "/contact": "Contact · Andrew Pols", "/resume": "Resume · Andrew Pols" };
+const titles = { "/": "Andrew Pols", "/resume": "Resume · Andrew Pols" };
+
+function scrollToHash(hash, behavior) {
+    let id = "";
+    try { id = decodeURIComponent(hash.slice(1)); } catch { return false; }
+    const target = id && document.getElementById(id);
+    if (!target) return false;
+    target.scrollIntoView({ block: "start", behavior });
+    // The fragment has done its job; keep the address bar clean.
+    history.replaceState(history.state, "", window.location.pathname + window.location.search);
+    return true;
+}
 
 export default function Layout() {
     const { pathname, key, hash } = useLocation();
+    const isResume = pathname === "/resume";
 
     useEffect(() => {
         document.title = titles[pathname.replace(/\/$/, "") || "/"] ?? "Not found · Andrew Pols";
     }, [pathname]);
-    const [open, setOpen] = useState(false);
-    const isResume = pathname === "/resume";
-    const toggleRef = useRef(null);
-    const scrollerRef = useRef(null);
-    const navRef = useRef(null);
 
+    // A reload or back/forward returns to where you were. The browser's own restore fails here because the page is
+    // shorter than it will be (the listening section only appears once its data arrives), so restore by hand and
+    // keep trying as the page grows, until it lands, the visitor scrolls, or a few seconds pass.
     useEffect(() => {
-        if (!open) return;
-        const onKey = (e) => {
-            if (e.key === "Escape") {
-                setOpen(false);
-                toggleRef.current?.focus();
+        if (!("scrollRestoration" in history)) return;
+        history.scrollRestoration = "manual";
+        const keyFor = () => `scroll:${window.location.pathname}`;
+        const read = () => { try { return Number(sessionStorage.getItem(keyFor())) || 0; } catch { return 0; } };
+        const write = (y) => { try { sessionStorage.setItem(keyFor(), String(Math.round(y))); } catch { /* storage unavailable */ } };
+
+        const navType = performance.getEntriesByType("navigation")[0]?.type;
+        const target = !window.location.hash && (navType === "reload" || navType === "back_forward") ? read() : 0;
+
+        let tracking = target === 0;
+        let frame = 0;
+        const onScroll = () => {
+            if (!tracking || frame) return;
+            frame = requestAnimationFrame(() => { frame = 0; write(window.scrollY); });
+        };
+        const onHide = () => { if (tracking) write(window.scrollY); };
+
+        let observer;
+        const stop = () => {
+            observer?.disconnect();
+            clearTimeout(timer);
+            for (const e of ["wheel", "touchstart", "keydown", "mousedown"]) window.removeEventListener(e, stop);
+            tracking = true;
+        };
+        const attempt = () => {
+            const max = document.documentElement.scrollHeight - window.innerHeight;
+            window.scrollTo({ top: Math.min(target, Math.max(max, 0)), left: 0, behavior: "instant" });
+            if (max >= target) stop();
+        };
+        let timer = 0;
+        if (target > 0) {
+            attempt();
+            if (!tracking) {
+                observer = new ResizeObserver(attempt);
+                observer.observe(document.body);
+                timer = setTimeout(stop, 4000);
+                for (const e of ["wheel", "touchstart", "keydown", "mousedown"]) window.addEventListener(e, stop, { passive: true });
             }
-        };
-        document.addEventListener("keydown", onKey);
-        navRef.current?.querySelector("a")?.focus();
-        const prevOverflow = document.documentElement.style.overflow;
-        document.documentElement.style.overflow = "hidden";
+        }
+
+        window.addEventListener("scroll", onScroll, { passive: true });
+        window.addEventListener("pagehide", onHide);
         return () => {
-            document.removeEventListener("keydown", onKey);
-            document.documentElement.style.overflow = prevOverflow;
+            stop();
+            cancelAnimationFrame(frame);
+            window.removeEventListener("scroll", onScroll);
+            window.removeEventListener("pagehide", onHide);
         };
-    }, [open]);
+    }, []);
 
-    useScrollRestore(scrollerRef, pathname);
+    // Landing on /#section (a shared link, or the old /work and /contact URLs after their redirect) scrolls to that section.
+    useEffect(() => {
+        const initial = window.location.hash;
+        if (initial) requestAnimationFrame(() => scrollToHash(initial, "instant"));
+    }, []);
 
-    // Every navigation starts at the top, including clicking a link to the page you're already on (the
-    // wordmark on Home). The location key changes each time. The initial key is the page load, where a
-    // refresh keeps its position. Staying on the same page glides up; arriving on a different page jumps,
-    // since animating over content that just swapped would only show the new page scrolling.
+    // Every navigation starts at the top unless it targets a section. The first key is the page load, where a refresh
+    // keeps its position. Staying on the same page glides; arriving on a different page jumps.
     const lastKey = useRef(key);
     const lastPath = useRef(pathname);
     useEffect(() => {
@@ -57,13 +102,10 @@ export default function Layout() {
         const samePage = lastPath.current === pathname;
         lastKey.current = key;
         lastPath.current = pathname;
-        // In-page anchor links (the Work index) change the location too; let the browser scroll to the target.
-        if (samePage && hash) return;
-        const glide = samePage && !window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-        const behavior = glide ? "smooth" : "instant";
-        scrollerRef.current?.scrollTo({ top: 0, left: 0, behavior });
+        const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+        const behavior = samePage && !reduced ? "smooth" : "instant";
+        if (hash && scrollToHash(hash, behavior)) return;
         window.scrollTo({ top: 0, left: 0, behavior });
-        setOpen(false);
     }, [key, pathname, hash]);
 
     return (
@@ -71,53 +113,34 @@ export default function Layout() {
             {!isResume && <a href="#outlet" className="skip-link" onClick={(e) => { e.preventDefault(); document.getElementById("outlet")?.focus(); }}>Skip to content</a>}
             {!isResume && (
                 <header id="header">
-                    <Link to="/" className="wordmark" aria-label="Andrew Pols, home">Andrew Pols</Link>
-
-                    <button
-                        ref={toggleRef}
-                        className="menu-toggle"
-                        aria-label={open ? "Close menu" : "Open menu"}
-                        aria-expanded={open}
-                        aria-controls="site-nav"
-                        onClick={() => setOpen((o) => !o)}
-                    >
-                        <MenuIcon open={open} />
-                    </button>
-
-                    <nav id="site-nav" ref={navRef} className={open ? "open" : ""} aria-label="Primary">
-                        {links.map((l) => (
-                            <NavLink
-                                key={l.to}
-                                to={l.to}
-                                end={l.end}
-                                target={l.external ? "_blank" : undefined}
-                                className={({ isActive }) => "nav-link" + (isActive ? " active" : "")}
-                            >
-                                {l.label}{l.external && <ArrowUpRight />}
-                            </NavLink>
-                        ))}
-                    </nav>
+                    <div className="page header-inner">
+                        <Link to="/" className="wordmark" onClick={() => { if (pathname === "/") window.scrollTo({ top: 0, behavior: "smooth" }); }}>Andrew Pols</Link>
+                        <nav id="site-nav" aria-label="Primary">
+                            {links.map((l) => (
+                                <Link key={l.to} to={l.to} target={l.external ? "_blank" : undefined} className="nav-link">
+                                    {l.label}{l.external && <ArrowUpRight />}
+                                </Link>
+                            ))}
+                        </nav>
+                    </div>
                 </header>
             )}
 
-            <div id="scroller" ref={scrollerRef}>
-            <main id="outlet" tabIndex={-1} className={isResume ? "is-resume" : ""}>
+            <main id="outlet" tabIndex={-1}>
                 <Outlet />
             </main>
 
             {!isResume && (
-                <footer id="footer">
+                <footer id="contact-section" className="page">
                     <div className="footer-row">
                         <p>&copy; 2026 Andrew Pols</p>
-                        <div className="footer-links">
-                            <a href="https://github.com/andrewpols" target="_blank" rel="noreferrer">GitHub<ArrowUpRight /></a>
-                            <a href="https://www.linkedin.com/in/andrewpols/" target="_blank" rel="noreferrer">LinkedIn<ArrowUpRight /></a>
-                            <a href="mailto:andrew.pols@mail.utoronto.ca">Email</a>
-                        </div>
+                        <p className="footer-links">
+                            <a href="mailto:andrew.pols@mail.utoronto.ca" className="text-link">andrew.pols@mail.utoronto.ca</a>
+                            <a href="tel:+15198181374" className="text-link">+1 (519) 818-1374</a>
+                        </p>
                     </div>
                 </footer>
             )}
-            </div>
         </div>
     );
 }
