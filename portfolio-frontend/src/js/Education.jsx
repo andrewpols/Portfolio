@@ -11,7 +11,7 @@ export default function Education() {
                     <h3 className="education-school"><OrgMark src={uoftMark} className="org-mark-tall" /><span>University of Toronto</span></h3>
                     <p className="meta nowrap when-wide">Third year</p>
                 </div>
-                <p className="education-degree">HBSc Computer Science<span className="meta when-narrow">Third year</span></p>
+                <p className="education-degree">HBSc Computer Science + Statistics<span className="meta when-narrow">Third year</span></p>
                 <dl className="education-facts">
                     <dt>GPA</dt>
                     <dd>4.00 / 4.00</dd>
