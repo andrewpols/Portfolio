@@ -1,16 +1,16 @@
 @import "tailwindcss";
 
-/* Warm paper and ink, a serif voice for headings, a rust accent. Dark mode is a lamp-lit brown-black. */
+/* Warm paper and ink, a serif voice for headings, a rust accent. The site is dark only: a lamp-lit brown-black. */
 :root {
-    --ground: #f6f1e7;
-    --surface: #ece5d6;
-    --ink: #1f1a14;
-    --ink-2: #4d443a;
-    --ink-3: #6e6354;
-    --rule: #ddd4c1;
-    --rule-strong: #c4b8a1;
-    --accent: #a8391c;
-    --on-accent: #fff8ef;
+    --ground: #181410;
+    --surface: #221d17;
+    --ink: #efe7d8;
+    --ink-2: #c0b5a2;
+    --ink-3: #9b8f7b;
+    --rule: #2e271f;
+    --rule-strong: #463c30;
+    --accent: #e8956b;
+    --on-accent: #1a0f08;
 
     --gutter: clamp(1.25rem, 5vw, 2rem);
     --wide: 58rem;
@@ -21,24 +21,11 @@
     font-family: var(--sans);
     line-height: 1.6;
     font-weight: 400;
-    color-scheme: light dark;
+    color-scheme: dark;
     font-synthesis: none;
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-}
-@media (prefers-color-scheme: dark) {
-    :root {
-        --ground: #181410;
-        --surface: #221d17;
-        --ink: #efe7d8;
-        --ink-2: #c0b5a2;
-        --ink-3: #9b8f7b;
-        --rule: #2e271f;
-        --rule-strong: #463c30;
-        --accent: #e8956b;
-        --on-accent: #1a0f08;
-    }
 }
 
 html { margin: 0; background: var(--ground); accent-color: var(--accent); caret-color: var(--accent); scrollbar-width: thin; scrollbar-color: var(--rule-strong) var(--ground); scroll-padding-top: 4.5rem; }
