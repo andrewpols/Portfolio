@@ -15,8 +15,8 @@
     --gutter: clamp(1.25rem, 5vw, 2rem);
     --wide: 58rem;
     --rail: 8rem;
-    --sans: "Instrument Sans", "Helvetica Neue", Arial, sans-serif;
-    --serif: "Newsreader", Georgia, "Times New Roman", serif;
+    --sans: "Schibsted Grotesk", "Helvetica Neue", Arial, sans-serif;
+    --serif: "Vollkorn", Georgia, "Times New Roman", serif;
 
     font-family: var(--sans);
     line-height: 1.6;
@@ -74,7 +74,8 @@ h1, h2, h3 { font-family: var(--serif); font-weight: 500; letter-spacing: -0.01e
 .block-title { font-size: 1.5rem; }
 @media (min-width: 52rem) {
     .block { grid-template-columns: var(--rail) minmax(0, 1fr); column-gap: 1.5rem; }
-    .block-title { padding-top: 0.15rem; }
+    /* The title stays in the rail, just under the header, while its section scrolls past. */
+    .block-title { padding-top: 0.15rem; align-self: start; position: sticky; top: 5rem; }
 }
 
 a, button { transition: color 140ms ease, text-decoration-color 140ms ease, border-color 140ms ease; }

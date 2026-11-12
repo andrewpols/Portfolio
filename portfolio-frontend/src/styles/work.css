@@ -1,5 +1,5 @@
 .block-body { min-width: 0; }
-.meta { font: 400 0.875rem/1.5 var(--sans); color: var(--ink-3); font-variant-numeric: tabular-nums; }
+.meta { font: 400 0.875rem/1.5 var(--sans); color: var(--ink-3); }
 
 /* previews: bare images with a hairline laid over them so a white screenshot still has an edge on a light page */
 .preview { position: relative; overflow: hidden; border-radius: 6px; background: var(--surface); }

@@ -1,6 +1,6 @@
 /* No hero: the name, one line and the links sit at the top, and the content starts right under them. */
 .intro { padding-top: clamp(2rem, 6vw, 3.25rem); }
-.intro h1 { font-size: clamp(2.5rem, 8vw, 3.5rem); font-weight: 400; letter-spacing: -0.02em; line-height: 1; }
+.intro h1 { font-size: clamp(2.5rem, 8vw, 3.5rem); font-weight: 500; letter-spacing: -0.02em; line-height: 1; }
 .intro-line { max-width: 48ch; margin-top: 0.75rem; font: italic 400 clamp(1rem, 4.1vw, 1.3125rem)/1.35 var(--serif); color: var(--ink-2); text-wrap: balance; }
 .links-row { display: flex; flex-wrap: wrap; gap: 0.4rem 1.5rem; margin-top: 1.25rem; font: 500 0.9375rem/1.5 var(--sans); }
 .links-primary { font-weight: 600; }
